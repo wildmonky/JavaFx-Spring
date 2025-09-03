@@ -938,8 +938,8 @@ public class AlarmService {
     private Map<SheetInfo, List<DeviceSCADAInputInfo>> transferExcel(InputStream inputStream) {
         try (
                 // 加载 Excel 文件
-                Workbook workbook = new XSSFWorkbook(inputStream);
-             ) {
+                Workbook workbook = new XSSFWorkbook(inputStream)
+        ) {
 
             Map<SheetInfo, List<DeviceSCADAInputInfo>> map = new HashMap<>();
             List<DeviceSCADAInputInfo> list;
@@ -1082,9 +1082,7 @@ public class AlarmService {
                 info.setVoltage(voltage);
                 info.setDevices(devices);
                 info.setInfo(warnInfo);
-
             }
-
         }
 
         return newInfos;
