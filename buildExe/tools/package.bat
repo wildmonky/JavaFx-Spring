@@ -1,6 +1,8 @@
 @echo off
 SET "app-name=validator-tools"
 SET "log-file=%~dp0package.out"
+SET "version=2.0"
+SET "type=msi"
 ::>=jdk 14
 SET "jpackage=C:\development\enviorment\jdk-17.0.12\bin\jpackage"
 
@@ -13,9 +15,9 @@ if not %ERRORLEVEL% EQU 0 (
 )
 
 echo remove existed exe >> %log-file%
-IF EXIST %app-name% rmdir /Q /S %app-name%
+IF EXIST %app-name%-%version%.%type% del /Q /F %app-name%-%version%.%type%
 IF not EXIST %~dp0..\..\target\exec\app.jar (
-    echo packaging... >> %log-file%
+    echo mvn packaging... >> %log-file%
     call mvn clean -D"maven.test.skip"=true package -f %~dp0..\..\pom.xml
     IF not EXIST %~dp0..\..\target\exec\app.jar (
         echo mvn clean -D"maven.test.skip"=true  package: maven package failed >> %log-file%
@@ -38,8 +40,11 @@ IF EXIST .\temp rmdir /Q /S .\temp
 @REM ) ELSE (
 @REM     echo build new exe fail >> %log-file%
 @REM )
-%jpackage% --type msi ^
-    --name %app-name%  ^
+
+echo jpackaging... >> %log-file%
+
+%jpackage% --type %type% ^
+    --name %app-name% --app-version %version%  ^
     --input %~dp0..\..\target\exec\ --main-jar app.jar ^
     --icon %~dp0..\..\src\main\resources\lizi.ico ^
     --dest .\ --temp .\temp\rule-validator ^
@@ -49,7 +54,7 @@ IF EXIST .\temp rmdir /Q /S .\temp
 
 IF EXIST .\temp rmdir /Q /S .\temp
 
-IF EXIST %app-name%-1.0.msi (
+IF EXIST %app-name%-%version%.%type% (
     echo build new exe success >> %log-file%
 ) ELSE (
     echo build new exe fail >> %log-file%
