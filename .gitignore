@@ -10,8 +10,8 @@ target/
 *.ipr
 buildExe/*.msi
 .mvn
-db
-log
+/db
+/log
 mvnw
 mvnw.cmd
 

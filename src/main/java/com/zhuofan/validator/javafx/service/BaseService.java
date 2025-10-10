@@ -50,7 +50,7 @@ public abstract class BaseService<T> extends Service<T> {
      */
     public BaseService() {
         this.setOnFailed(event -> {
-            log.debug("BaseService onFailed");
+            log.warn("BaseService onFailed", event.getSource().getException());
         });
         this.setOnSucceeded(event -> {
             log.debug("BaseService onSucceeded");
