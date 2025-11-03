@@ -93,7 +93,7 @@ public class AlarmService {
     // (?:.(?!开关|开关间隔|电[容|抗]器组|母线|小电流|消弧线圈))*?(?!消弧)线(?!圈)
     // (?!.*线高抗)(?:.(?!开关|开关间隔|电[容|抗]器组|母线|小电流))*?(?!消弧)线(?!圈)
     // (?!.*线高抗)(?!.*母线)(?:.(?!开关|开关间隔|电[容|抗]器组|母线|小电流))*?(?!消弧)线(?!圈)
-    private final String linePattern = "(?!.*线高抗)(?:.(?!开关|开关间隔|电[容|抗]器组|母线|小电流))*?(?<!消弧|\\d母|[ⅠⅡ]段交流馈)线(?!圈|路)";
+    private final String linePattern = "(?!.*线高抗)(?:.(?!开关|开关间隔|电[容|抗]器组|母线|小电流))*?(?<!消弧|\\d母|[IⅠⅡ]段交流馈)线(?!圈|路)";
 
     // 电容器组/电抗器组 正则
     private final String capacitanceAndReactancePattern= "(?:#\\d+(?:低压电[容|抗]器|电[容|抗]器组)|AVC(?:#\\d+(?:低压电容器|电容器组))?)";
@@ -578,14 +578,21 @@ public class AlarmService {
         // 公用告警信息
         List<AlarmTypeRuleModel> publicTypeRules = map.get("");
         // 需要全文匹配的
-        List<AlarmTypeRuleModel> fullTextMatchTypeRules = deviceSCADAInfoTypeRuleModels.stream().filter(e -> BooleanUtils.isTrue(e.getFullTextMatch()) || BooleanUtils.isTrue(e.getRuleFullTextMatch())).collect(Collectors.toList());
+        List<AlarmTypeRuleModel> fullTextMatchTypeRules = deviceSCADAInfoTypeRuleModels.stream().filter(e -> BooleanUtils.isTrue(e.getFullTextMatch()) || BooleanUtils.isTrue(e.getRuleFullTextMatch())).toList();
         // 信息类型----需拆分的信息拼接
         Map<String, Map<String,String>> mergeMessageMap = deviceSCADAInfoTypeRuleModels.stream().collect(Collectors.groupingBy(e -> e.getDeviceId() == null ? "" : e.getDeviceId(), Collectors.groupingBy(e -> StringUtils.isBlank(e.getName()) ? "" : e.getName(), Collectors.mapping(AlarmTypeRuleModel::getRuleName, Collectors.joining(",")))));
         // 数据库中同一信息类型下的规范信息数量
 //        Map<String, Long> ruleNumWithSameTypeInDB = deviceSCADAInfoTypeRuleModels.stream().collect(Collectors.groupingBy(DeviceSCADAInfoTypeRuleModel::getId, Collectors.counting()));
-
+        Pattern lineBrokenPattern = Pattern.compile("^.+接收.+[AB][12]网断链(?:|告警)$");
         Pattern excludePattern = Pattern.compile(".*[^接]地刀[^闸].*");
         for (DeviceSCADAInputInfo info : infos) {
+
+            // 断链告警检测
+            Matcher matcher = lineBrokenPattern.matcher(info.getWarnInfo());
+            if (matcher.matches() && info.getWarnInfo().length() <= 39) {
+                info.setInfoTypeId("");
+                continue;
+            }
 
             // 检查是否存在重复信号
             if (parsedInfoSet.contains(info.getWarnInfo())) {
@@ -696,30 +703,30 @@ public class AlarmService {
         // 检测信息中同一信息类型下的规范信息数量
 //        Map<String, Long> ruleNumWithSameTypeInData = deviceSCADAInfoTypeRuleModels.stream().collect(Collectors.groupingBy(DeviceSCADAInfoType::getId, Collectors.counting()));
         // 校验信息是否可以主站合并
-        for (DeviceSCADAInputInfo deviceSCADAInputInfo : infos) {
-            String infoTypeId = deviceSCADAInputInfo.getInfoTypeId();
-            Boolean masterMerge = deviceSCADAInputInfo.getMasterMerge();
-
-            // 跳过未匹配上的
-            if (infoTypeId == null || masterMerge == null) {
-                continue;
-            }
-
-            // 跳过 不能主站合并的
-            if (!masterMerge) {
-                continue;
-            }
-
-            // 跳过 相同信息类型下只有一条规范信息的 提示合并的必须展示类型
-//            if (ruleNumWithSameTypeInData.get(infoTypeId) == 1L || ruleNumWithSameTypeInDB.get(infoTypeId) == 1L) {
+//        for (DeviceSCADAInputInfo deviceSCADAInputInfo : infos) {
+//            String infoTypeId = deviceSCADAInputInfo.getInfoTypeId();
+//            Boolean masterMerge = deviceSCADAInputInfo.getMasterMerge();
+//
+//            // 跳过未匹配上的
+//            if (infoTypeId == null || masterMerge == null) {
 //                continue;
 //            }
-            if (BooleanUtils.isTrue(deviceSCADAInputInfo.getMatchType())) {
-                continue;
-            }
-
-            appendTips("符合规范，应合并为：" + deviceSCADAInputInfo.getInfoTypeName(), deviceSCADAInputInfo);
-        }
+//
+//            // 跳过 不能主站合并的
+//            if (!masterMerge) {
+//                continue;
+//            }
+//
+//            // 跳过 相同信息类型下只有一条规范信息的 提示合并的必须展示类型
+////            if (ruleNumWithSameTypeInData.get(infoTypeId) == 1L || ruleNumWithSameTypeInDB.get(infoTypeId) == 1L) {
+////                continue;
+////            }
+//            if (BooleanUtils.isTrue(deviceSCADAInputInfo.getMatchType())) {
+//                continue;
+//            }
+//
+//            appendTips("符合规范，应合并为：" + deviceSCADAInputInfo.getInfoTypeName(), deviceSCADAInputInfo);
+//        }
 
         return infos;
     }
@@ -797,11 +804,12 @@ public class AlarmService {
                 info.setInfoTypeId(infoTypeRuleModel.getId());
                 info.setInfoTypeName(infoTypeRuleModel.getName());
                 info.setMasterMerge(infoTypeRuleModel.getMasterMerge());
-                if (!infoTypeRuleModel.getMasterMerge()) {
-                    Map<String, String> deviceMergeMessageMap = mergeMessageMap.get(device.getId());
-                    // FIXME device.getId() == null
-                    appendTips("符合规范，应拆分为：" + deviceMergeMessageMap.get(infoTypeRuleModel.getName()), info);
-                }
+                //TODO 不需要拆分
+//                if (!infoTypeRuleModel.getMasterMerge()) {
+//                    Map<String, String> deviceMergeMessageMap = mergeMessageMap.get(device.getId());
+//                    // FIXME device.getId() == null
+//                    appendTips("符合规范，应拆分为：" + deviceMergeMessageMap.get(infoTypeRuleModel.getName()), info);
+//                }
                 if (PRINT_MATCH_PATTERN) {
                     log.info("{}, {}{}-{}", info.getWarnInfo(), device.getVoltage(), device.getName(), infoTypeRuleModel.getName());
                 }
@@ -1012,7 +1020,7 @@ public class AlarmService {
                             } else if (cell.getCellType() == CellType.STRING) {
                                 deviceSCADAInputInfo.setPointCode(cell.getStringCellValue());
                             } else if (cell.getCellType() == CellType.NUMERIC) {
-                                deviceSCADAInputInfo.setPointCode(cell.getNumericCellValue() + "");
+                                deviceSCADAInputInfo.setPointCode(String.format("%.0f", cell.getNumericCellValue()));
                             }
                         }
                     }

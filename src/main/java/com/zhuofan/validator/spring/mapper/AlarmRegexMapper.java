@@ -3,6 +3,7 @@ package com.zhuofan.validator.spring.mapper;
 import com.zhuofan.validator.spring.entity.AlarmRegex;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public interface AlarmRegexMapper extends CommonMapper<AlarmRegex>{
@@ -20,5 +21,7 @@ public interface AlarmRegexMapper extends CommonMapper<AlarmRegex>{
         reList.addAll(selectUnderDeviceInfoRule(deviceId));
         return reList;
     }
+
+    int deleteIds(Collection<?> ids);
 
 }

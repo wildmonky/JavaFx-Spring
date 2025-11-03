@@ -1,3 +1,5 @@
+-- 无效 免费版不支持undo，只有Team、企业版才有undo功能
+-- flyway.validate-migration-naming（默认false） 必须为false，否则报错
 DELETE FROM "OMS_ZF"."DEVICE";
 DROP TABLE "OMS_ZF"."DEVICE";
 

@@ -13,6 +13,6 @@ public interface CommonMapper<T> extends BaseMapper<T> {
      */
     int insertBatchSomeColumn(List<T> entityList);
 
-    @Select(" SELECT SEQ.NEXTVAL NEXTVAL FROM DUAL ")
+    @Select("SELECT NEXT VALUE FOR SQ_PRIMARY_ID")
     long nextSeqId();
 }

@@ -17,11 +17,16 @@ spring:
     batch: true
     create-schemas: true
     schemas: OMS_ZF
-    baseline-version: 1
-    baseline-on-migrate: true
     table: flyway_schema_history
     locations:
       - classpath:db/migration
+    # 第一次迁移时，在非空的schema(即已经存在数据表结构的数据库中，应用flyway)，是否创建基线
+    baseline-on-migrate: true
+    # 当在非空schema中创建基线时，对应的基线版本
+    baseline-version: 1
+#    target: 3?
+    validate-on-migrate: true
+    validate-migration-naming: false
 
   datasource:
     embedded-database-connection: h2
