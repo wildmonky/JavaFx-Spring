@@ -1,4 +1,4 @@
-module org.lizhao.validator {
+module com.zhuofan.validator {
     // requires 当前模块需要引入包
     // requires transitive A 依赖本模块的程序会自动依赖A
     // require static lombok 程序编译时，lombok依赖包必须存在，运行时不一定存在。跟maven scope重复？
@@ -34,7 +34,6 @@ module org.lizhao.validator {
     requires org.mybatis;
     requires com.baomidou.mybatis.plus.core;
     requires com.baomidou.mybatis.plus.annotation;
-//    requires com.baomidou.mybatis.plus.spring;
     requires com.baomidou.mybatis.plus.extension;
     requires org.mybatis.spring;
     requires java.sql;
@@ -73,6 +72,7 @@ module org.lizhao.validator {
     // json文件读取
     opens data;
     exports com.zhuofan.validator.spring;
+    exports com.zhuofan.validator.spring.enums;
     exports com.zhuofan.validator.spring.event;
 
 }

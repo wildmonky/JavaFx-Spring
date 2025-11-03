@@ -11,8 +11,8 @@
     </parent>
     <groupId>com.zhuofan.validator</groupId>
     <artifactId>rule-validator</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <name>rule-validator</name>
+    <version>2.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>3.5.12</version>
+            <version>3.5.8</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -147,6 +147,19 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel-core</artifactId>
+            <version>4.0.3</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
@@ -205,6 +218,26 @@
 <!--                    </execution>-->
 <!--                </executions>-->
 <!--            </plugin>-->
+            <!--flyway 迁移maven插件-->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>11.15.0</version>
+                <configuration>
+                    <driver>org.h2.Driver</driver>
+                    <encoding>UTF-8</encoding>
+                    <url>jdbc:h2:file:${user.dir}/db/test</url>
+                    <defaultSchema>OMS_ZF</defaultSchema>
+                    <user>sa</user>
+                    <password>sa</password>
+                    <baselineOnMigrate>true</baselineOnMigrate>
+                    <baselineVersion>1</baselineVersion>
+                    <target>3?</target>
+                    <validateOnMigrate>true</validateOnMigrate>
+                    <validateMigrationNaming>false</validateMigrationNaming>
+                    <locations>classpath:db/migration</locations>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

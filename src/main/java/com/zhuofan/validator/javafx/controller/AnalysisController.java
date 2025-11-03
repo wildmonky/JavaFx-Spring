@@ -88,7 +88,7 @@ public class AnalysisController {
             int maxLength = 28;
             String name = selectedFile.getName();
             if (name.length() >= maxLength) {
-                name = name.substring(0, maxLength + 1) + "...";
+                name = name.substring(0, maxLength - 1) + "...";
             }
             fileName.setText(name);
             this.selectedFilePath = selectedFile.toPath();
@@ -115,11 +115,11 @@ public class AnalysisController {
             for (DeviceSCADAInputInfo r : result) {
                 String mes = "异常";
                 List<String> tips = r.getTips();
-                if (r.getInfoTypeId() == null && org.apache.commons.collections4.CollectionUtils.isEmpty(tips)) {
+                if (r.getInfoTypeId() == null && CollectionUtils.isEmpty(tips)) {
                     mes = "";
                 }
 
-                if (r.getInfoTypeId() != null && org.apache.commons.collections4.CollectionUtils.isEmpty(tips)) {
+                if (r.getInfoTypeId() != null && CollectionUtils.isEmpty(tips)) {
                     mes = "符合规范";
                 }
 

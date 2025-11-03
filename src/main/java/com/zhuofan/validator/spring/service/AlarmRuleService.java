@@ -1,29 +1,36 @@
 package com.zhuofan.validator.spring.service;
 
-//import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-//import org.springframework.stereotype.Service;
+import com.zhuofan.validator.spring.entity.AlarmRule;
+import com.zhuofan.validator.spring.mapper.AlarmRuleMapper;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
-//@Service
-public class AlarmRuleService
-//        extends ServiceImpl<AlarmRuleMapper, AlarmRule>
-{
+@Service
+public class AlarmRuleService {
 
-//    public  boolean saveBatch(Collection<AlarmRule> list, int batchSize) {
-//        int size = list.size();
-//        int idxLimit = Math.min(batchSize, size);
-//        int i = 1;
-//        List<AlarmRule> batchList = new ArrayList<>();
-//        for (AlarmRule element : list) {
-//            batchList.add(element);
-//            if (i == idxLimit) {
-//                this.getBaseMapper().insertBatchSomeColumn(batchList);
-//                batchList.clear();
-//                idxLimit = Math.min(idxLimit + batchSize, size);
-//            }
-//            i++;
-//        }
-//        return true;
-//    }
+    @Resource
+    private AlarmRuleMapper alarmRuleMapper;
+
+    public  boolean saveBatch(Collection<AlarmRule> list, int batchSize) {
+        int size = list.size();
+        int idxLimit = Math.min(batchSize, size);
+        int i = 1;
+        List<AlarmRule> batchList = new ArrayList<>();
+        for (AlarmRule element : list) {
+            batchList.add(element);
+            if (i == idxLimit) {
+                alarmRuleMapper.insertBatchSomeColumn(batchList);
+                batchList.clear();
+                idxLimit = Math.min(idxLimit + batchSize, size);
+            }
+            i++;
+        }
+        return true;
+    }
 
 }

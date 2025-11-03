@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhuofan.validator.spring.mapper.AlarmTypeMapper">
+
+    <delete id="deleteIds">
+        delete from DEVICE_SCADA_INFO_TYPE where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
     <select id="selectByDevice" resultType="com.zhuofan.validator.spring.entity.AlarmType">
         -- 删除 设备 信息类型
         SELECT dsit.* FROM DEVICE_SCADA_INFO_TYPE dsit

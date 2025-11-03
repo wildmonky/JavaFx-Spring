@@ -24,7 +24,7 @@
         </Button>
         <Button fx:id="downloadButton" layoutX="606.0" mnemonicParsing="false" onAction="#download" prefHeight="31.0" prefWidth="64.0" styleClass="btn, btn-primary" text="下载" />
     </Pane>
-    <TableView fx:id="dataTable" layoutY="102.0" prefHeight="594.0" prefWidth="1300.0">
+    <TableView fx:id="dataTable" layoutY="102.0" prefHeight="590.0" prefWidth="1300.0">
         <columns>
             <TableColumn fx:id="pointCode" prefWidth="75.0" text="行数" />
             <TableColumn fx:id="alarmContent" prefWidth="560.0" text="告警信息" />
