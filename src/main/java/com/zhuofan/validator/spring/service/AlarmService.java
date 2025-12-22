@@ -585,7 +585,19 @@ public class AlarmService {
 //        Map<String, Long> ruleNumWithSameTypeInDB = deviceSCADAInfoTypeRuleModels.stream().collect(Collectors.groupingBy(DeviceSCADAInfoTypeRuleModel::getId, Collectors.counting()));
         Pattern lineBrokenPattern = Pattern.compile("^.+接收.+[AB][12]网断链(?:|告警)$");
         Pattern excludePattern = Pattern.compile(".*[^接]地刀[^闸].*");
+
+        // 新增信号匹配pattern
+        Pattern specialPattern = Pattern.compile("110kV.+?线电压互感器1\\dPT(?:|0接地)刀闸[合分]位");
         for (DeviceSCADAInputInfo info : infos) {
+
+            if ("全站事故总".equals(info.getWarnInfo()) || "全站事故总信号".equals(info.getWarnInfo())) {
+                appendTips("符合规范", info);
+                continue;
+            }
+            if (specialPattern.matcher(info.getWarnInfo()).matches()) {
+                appendTips("符合规范", info);
+                continue;
+            }
 
             // 断链告警检测
             Matcher matcher = lineBrokenPattern.matcher(info.getWarnInfo());
