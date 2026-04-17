@@ -1024,7 +1024,9 @@ public class AlarmService {
                                 deviceSCADAInputInfo.setDevice(String.valueOf(cell.getNumericCellValue()));
                             }
                         } else if (infoIndex == columnIndex) {
-                            deviceSCADAInputInfo.setWarnInfo(cell.getStringCellValue());
+                            String warnSignal = cell.getStringCellValue();
+                            warnSignal = warnSignal != null ? warnSignal.trim() : "";
+                            deviceSCADAInputInfo.setWarnInfo(warnSignal);
                         } else if (pointCodeIndex == columnIndex) {
                             if (cell.getCellType() == CellType.FORMULA) {
                                 CellValue cellValue = formulaEvaluator.evaluate(cell);

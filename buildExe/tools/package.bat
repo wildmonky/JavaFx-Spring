@@ -1,7 +1,7 @@
 @echo off
 SET "app-name=validator-tools"
 SET "log-file=%~dp0package.out"
-SET "version=2.1"
+SET "version=2.3"
 SET "type=msi"
 ::>=jdk 14
 SET "jpackage=C:\development\enviorment\jdk-17.0.12\bin\jpackage"
