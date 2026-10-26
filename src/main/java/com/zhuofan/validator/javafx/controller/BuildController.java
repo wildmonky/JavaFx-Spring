@@ -11,9 +11,9 @@ import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 
 import java.io.*;
@@ -21,9 +21,9 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Slf4j
+@Controller
 public class BuildController {
-
-    private final Logger logger = LoggerFactory.getLogger(BuildController.class);
 
     @FXML
     public Button chooseFileButton;
@@ -56,7 +56,6 @@ public class BuildController {
     @Setter
     @Getter
     private List<String> buildData;
-
 
     private void initialize() {
         // 创建一个TextFormatter，使用IntegerStringConverter，并设置过滤器只允许数字
@@ -191,7 +190,7 @@ public class BuildController {
         List<String> data = this.buildData;
 
         if (CollectionUtils.isEmpty(data)) {
-            logger.info("无待下载数据");
+            log.info("无待下载数据");
             return;
         }
 
@@ -205,7 +204,7 @@ public class BuildController {
         File file = fileChooser.showSaveDialog(stage);
 
         if (file == null) {
-            logger.info("未选择导出文件位置");
+            log.info("未选择导出文件位置");
             return;
         }
 
@@ -232,7 +231,7 @@ public class BuildController {
                         sheet.setColumnWidth(0, (int)Math.min(255, (maxLength * 0.31 + 5) / 0.31) * 256);
                         workbook.write(outputStream);
                     } catch (IOException e) {
-                        logger.info(e.getMessage());
+                        log.info(e.getMessage());
                     }
                     return null;
                 })

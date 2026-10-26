@@ -46,7 +46,7 @@ public class SpringUtils {
         }
 
         LocalApplicationContext localApplicationContext = new LocalApplicationContext();
-        localApplicationContext.addDevPropertySource("default", "application.properties");
+        localApplicationContext.addDevPropertySource("default", "application.yml");
         applicationContext = localApplicationContext;
     }
 
@@ -56,6 +56,10 @@ public class SpringUtils {
         } catch (BeansException e) {
             return applicationContext.getBean(clazz);
         }
+    }
+
+    public static <T> T getBean(Class<T> clazz) {
+        return applicationContext.getBean(clazz);
     }
 
     public Resource getResource(String location) throws IOException {

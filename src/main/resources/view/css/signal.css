@@ -1,0 +1,28 @@
+/*.tree-table-view {*/
+/*    -fx-fixed-cell-size: -1*/
+/*}*/
+
+/*.tree-table-row-cell {*/
+/*    -fx-fixed-cell-size: -1*/
+/*    !*-fx-max-height: 40;*!*/
+/*}*/
+
+.tree-table-row-cell {
+    -fx-padding: 0;
+}
+.tree-table-cell {
+    -fx-padding: 0 8px 0 8px; /* 上下 0，左右保留一些间距 */
+}
+
+/*.tree-table-cell {*/
+/*    -fx-wrap-text: true;*/
+/*}*/
+
+/*HBox {*/
+/*    -fx-border-color: black;*/
+/*    -fx-border-style: solid;*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-alignment: center;*/
+/*    -fx-max-height: 40px;*/
+/*    -fx-padding: 0;*/
+/*}*/

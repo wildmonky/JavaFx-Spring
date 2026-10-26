@@ -1,0 +1,240 @@
+[
+  {
+    "name": "#1主变",
+    "type": "主变",
+    "voltage": "110kV",
+    "template": "",
+    "children": [
+      {
+        "name": "#1主变变高101开关",
+        "type": "开关",
+        "voltage": "110kV",
+        "template": "",
+        "children": [
+          {
+            "name": "#1主变变高1010刀闸",
+            "type": "刀闸",
+            "voltage": "110kV",
+            "template": "",
+            "children": []
+          },
+          {
+            "name": "#1主变变高101B0刀闸",
+            "type": "接地刀闸",
+            "voltage": "110kV",
+            "template": "",
+            "children": []
+          },
+          {
+            "name": "#1主变变高101C0刀闸",
+            "type": "接地刀闸",
+            "voltage": "110kV",
+            "template": "",
+            "children": []
+          },
+          {
+            "name": "#1主变变高101T0刀闸",
+            "type": "接地刀闸",
+            "voltage": "110kV",
+            "template": "",
+            "children": []
+          },
+          {
+            "name": "#1主变变高中性点11000接地刀闸",
+            "type": "中性点接地刀闸",
+            "voltage": "110kV",
+            "template": "",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "#1电容器组",
+    "type": "电容器组",
+    "voltage": "10kV",
+    "template": "",
+    "children": [
+      {
+        "name": "#1电容器组516开关",
+        "type": "开关",
+        "voltage": "10kV",
+        "template": "",
+        "children": [
+          {
+            "name": "#1电容器组516Y0接地刀闸",
+            "type": "接地刀闸",
+            "voltage": "10kV",
+            "template": "",
+            "children": []
+          },
+          {
+            "name": "#1电容器组51640接地刀闸",
+            "type": "接地刀闸",
+            "voltage": "10kV",
+            "template": "",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "分段500开关",
+    "type": "分段开关",
+    "voltage": "10kV",
+    "template": "",
+    "children": [
+      {
+        "name": "分段5001隔离小车",
+        "type": "隔离小车",
+        "voltage": "10kV",
+        "template": "",
+        "children": []
+      },
+      {
+        "name": "分段500开关小车",
+        "type": "开关小车",
+        "voltage": "10kV",
+        "template": "",
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": "#1接地变",
+    "type": "接地变",
+    "voltage": "10kV",
+    "template": "",
+    "children": [
+      {
+        "name": "#1接地变515开关",
+        "type": "开关",
+        "voltage": "10kV",
+        "template": "",
+        "children": [
+          {
+            "name": "#1接地变51540接地刀闸",
+            "type": "接地刀闸",
+            "voltage": "10kV",
+            "template": "",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "F01线",
+    "type": "馈线",
+    "voltage": "10kV",
+    "template": "",
+    "children": [
+      {
+        "name": "F01线701开关",
+        "type": "开关",
+        "voltage": "10kV",
+        "template": "",
+        "children": [
+          {
+            "name": "F01线701接地刀闸",
+            "type": "接地刀闸",
+            "voltage": "10kV",
+            "template": "",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "#1母线",
+    "type": "母线",
+    "voltage": "10kV",
+    "template": "",
+    "children": [
+      {
+        "name": "#1母线51PT",
+        "type": "PT",
+        "voltage": "10kV",
+        "template": "",
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": "#2母线",
+    "type": "母线",
+    "voltage": "10kV",
+    "template": "",
+    "children": [
+      {
+        "name": "#2母线52甲PT",
+        "type": "PT",
+        "voltage": "10kV",
+        "template": "",
+        "children": []
+      },
+      {
+        "name": "#2母线52乙PT",
+        "type": "PT",
+        "voltage": "10kV",
+        "template": "",
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": "#3母线",
+    "type": "母线",
+    "voltage": "10kV",
+    "template": "",
+    "children": [
+      {
+        "name": "#3母线53PT",
+        "type": "PT",
+        "voltage": "10kV",
+        "template": "",
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": "#1站用变",
+    "type": "站用变",
+    "voltage": "10kV",
+    "template": "",
+    "children": [
+      {
+        "name": "#1站用变变高514开关",
+        "type": "开关",
+        "voltage": "10kV",
+        "template": "",
+        "children": [
+          {
+            "name": "#1站用变变高51440接地刀闸",
+            "type": "接地刀闸",
+            "voltage": "10kV",
+            "template": "",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "#1站用变380V401甲开关",
+        "type": "开关",
+        "voltage": "10kV",
+        "template": "",
+        "children": []
+      },
+      {
+        "name": "#1站用变380V401乙开关",
+        "type": "开关",
+        "voltage": "10kV",
+        "template": "",
+        "children": []
+      }
+    ]
+  }
+]

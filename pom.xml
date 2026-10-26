@@ -12,11 +12,30 @@
     <groupId>com.zhuofan.validator</groupId>
     <artifactId>rule-validator</artifactId>
     <name>rule-validator</name>
-    <version>2.1</version>
+    <version>3.0</version>
+
+    <repositories>
+        <repository>
+            <id>ali</id>
+            <name>aliyun-public</name>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <url>https://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>nonali</id>
+            <name>gluonhq-repo</name>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <url>https://nexus.gluonhq.com/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>17.0.12</javafx.version>
+        <javafx.version>21.0.1</javafx.version>
     </properties>
 
     <dependencies>
@@ -118,11 +137,59 @@
 <!--            <artifactId>ikonli-javafx</artifactId>-->
 <!--            <version>12.3.1</version>-->
 <!--        </dependency>-->
+
+        <!-- gluonhq JavaFX UI -->
         <dependency>
             <groupId>org.kordamp.bootstrapfx</groupId>
             <artifactId>bootstrapfx-core</artifactId>
             <version>0.4.0</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.gluonhq</groupId>-->
+<!--            <artifactId>charm-glisten</artifactId>-->
+<!--            <version>6.2.3</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.gluonhq.attach</groupId>-->
+<!--            <artifactId>util</artifactId>-->
+<!--            <version>4.0.24</version>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>atlantafx-base</artifactId>
+            <version>2.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.2.6</version> <!-- 请根据你的 JavaFX 版本选择 -->
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>devtoolsfx-gui</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>devtoolsfx-connector</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+<!--        <dependency>-->
+<!--            <groupId>org.jetbrains</groupId>-->
+<!--            <artifactId>annotations</artifactId>-->
+<!--            <version>24.1.0</version>-->
+<!--        </dependency>-->
 <!--        <dependency>-->
 <!--            <groupId>eu.hansolo</groupId>-->
 <!--            <artifactId>tilesfx</artifactId>-->
@@ -156,7 +223,7 @@
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel-core</artifactId>
             <version>4.0.3</version>
-            <scope>test</scope>
+<!--            <scope>test</scope>-->
         </dependency>
 
         <dependency>
@@ -166,7 +233,21 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profile.active>dev</profile.active>
+                <dev.dependency>true</dev.dependency>
+            </properties>
+        </profile>
+    </profiles>
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+    <property name="CHARSET" value="UTF-8" />
+    <springProperty scope="context" name="LOG_FILE" source="logging.file.name" defaultValue="app"/>
+    <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root" defaultValue="DEBUG"/>
+    <springProperty scope="context" name="LOG_PATH" source="logging.file.path" defaultValue="${user.dir}/logs"/>
+    <springProperty scope="context" name="LOG_CONSOLE_PATTERN" source="logging.pattern.console" defaultValue="%d{yyyy-MM-dd HH:mm:ss.SSS,GMT+8} %magenta([%thread]) %highlight(%-5p) %highlight(${PID:-}) --- %cyan(%logger{50},%method) : %msg%n"/>
+    <springProperty scope="context" name="LOG_FILE_PATTERN" source="logging.pattern.file" defaultValue="%d{yyyy-MM-dd HH:mm:ss.SSS,GMT+8} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- 2.日志格式和颜色渲染 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>${CHARSET}</charset>
+            <pattern>${LOG_CONSOLE_PATTERN}}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE}.log</file>
+        <encoder>
+            <pattern>${LOG_FILE_PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- 保留最近 10 天的日志文件 -->
+            <maxHistory>10</maxHistory>
+            <!-- 单个日志文件大小 -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 删除历史日志的大小限制 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <springProfile name="!prod">
+<!--        <include resource="logback-dev.xml" />-->
+        <root level="${LOG_LEVEL}">
+            <appender-ref level="${LOG_LEVEL}" ref="CONSOLE" />
+            <appender-ref level="${LOG_LEVEL}" ref="FILE" />
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+<!--        <include resource="logback-prod.xml" />-->
+        <root level="${LOG_LEVEL}">
+            <appender-ref level="${LOG_LEVEL}" ref="CONSOLE" />
+            <appender-ref level="${LOG_LEVEL}" ref="FILE" />
+        </root>
+    </springProfile>
+</configuration>

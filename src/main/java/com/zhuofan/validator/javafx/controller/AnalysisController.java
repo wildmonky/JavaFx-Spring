@@ -18,9 +18,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 
 import java.io.File;
@@ -35,9 +35,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 @Setter
+@Slf4j
+@Controller
 public class AnalysisController {
-
-    private final Logger logger = LoggerFactory.getLogger(AnalysisController.class);
 
     @FXML
     private Text fileName;
@@ -182,7 +182,7 @@ public class AnalysisController {
     public void download(ActionEvent event) {
 
         if (CollectionUtils.isEmpty(alarmInfoList)) {
-            logger.info("无待下载数据");
+            log.info("无待下载数据");
             return;
         }
 
@@ -196,7 +196,7 @@ public class AnalysisController {
         File file = fileChooser.showSaveDialog(stage);
 
         if (file == null) {
-            logger.info("未选择导出文件位置");
+            log.info("未选择导出文件位置");
             return;
         }
 
@@ -219,7 +219,7 @@ public class AnalysisController {
                         alarmService.createExcel("test", map, outputStream);
                     } catch (IOException e) {
 //                        throw new RuntimeException(e);
-                        logger.info(e.getMessage());
+                        log.info(e.getMessage());
                     }
                     return null;
                 })

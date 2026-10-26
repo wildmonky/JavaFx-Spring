@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.ModalPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane prefHeight="679.0" prefWidth="1262.0" stylesheets="@css/signal.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zhuofan.validator.javafx.controller.DeviceSignalController">
+   <SplitPane dividerPositions="0.24528301886792453" layoutX="19.0" layoutY="10.0" prefHeight="661.0" prefWidth="1219.0">
+     <items>
+       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="536.0" prefWidth="379.0">
+            <children>
+               <SplitPane dividerPositions="0.14818548387096772" orientation="VERTICAL" prefHeight="661.0" prefWidth="338.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                 <items>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="133.0" prefWidth="297.0">
+                        <children>
+                           <ComboBox fx:id="voltageLevelSelector" editable="true" layoutX="182.0" layoutY="9.0" prefHeight="35.0" prefWidth="108.0" promptText="电压等级" />
+                           <ComboBox fx:id="deviceTypeSelector" editable="true" layoutX="8.0" layoutY="9.0" prefHeight="35.0" prefWidth="157.0" promptText="设备类型" />
+                           <TextField fx:id="deviceNameField" layoutX="8.0" layoutY="53.0" prefHeight="35.0" prefWidth="157.0" promptText="设备名称" />
+                           <Button fx:id="searchDeviceButton" layoutX="182.0" layoutY="53.0" mnemonicParsing="false" onAction="#searchDevice" prefHeight="35.0" prefWidth="108.0" styleClass="btn, btn-primary" text="查询设备" AnchorPane.rightAnchor="7.0" />
+                        </children>
+                     </AnchorPane>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                        <children>
+                           <TreeView fx:id="deviceTreeView" prefHeight="532.0" prefWidth="483.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                 </items>
+               </SplitPane>
+            </children>
+         </AnchorPane>
+       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+            <children>
+               <SplitPane dividerPositions="0.08925869894099848" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                 <items>
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="50.0" prefWidth="918.0">
+                        <children>
+                            <TextField fx:id="searchParamTypeName" layoutX="14.0" layoutY="14.0" prefHeight="35.0" prefWidth="177.0" promptText="信息类型名称" />
+                            <TextField fx:id="searchParamTemplate" layoutX="219.0" layoutY="14.0" prefHeight="26.0" prefWidth="211.0" promptText="规范信息描述" />
+                            <Button fx:id="searchSignalButton" layoutX="712.0" layoutY="14.0" mnemonicParsing="false" onAction="#searchSignal" prefHeight="31.0" prefWidth="108.0" styleClass="accent, btn, btn-primary" text="查询规范" />
+                            <Button fx:id="exportSignalButton" layoutX="833.0" layoutY="14.0" mnemonicParsing="false" onAction="#exportSignal" prefHeight="31.0" prefWidth="71.0" styleClass="success, btn, btn-primary" text="导出" />
+                        </children>
+                     </AnchorPane>
+                     <StackPane>
+                         <ModalPane fx:id="modal">
+                         </ModalPane>
+                         <ScrollPane prefHeight="594.0" prefWidth="918.0">
+                             <content>
+                                 <TreeTableView fx:id="dataTable" minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="918.0">
+                                     <columns>
+                                         <TreeTableColumn fx:id="nameCol" prefWidth="155.0" text="设备名称" />
+                                         <TreeTableColumn fx:id="typeCol" minWidth="0.0" prefWidth="184.0" text="信息类型名称" />
+                                         <TreeTableColumn fx:id="templateCol" minWidth="0.0" prefWidth="321.0" text="规范信息描述" />
+                                         <TreeTableColumn fx:id="signalCol" prefWidth="169.0" text="规范信息" />
+                                         <TreeTableColumn fx:id="bayNameCol" prefWidth="220.0" text="间隔" />
+                                         <TreeTableColumn fx:id="normalStatusCol" prefWidth="220.0" text="信号常态" />
+                                         <TreeTableColumn fx:id="remoteSignalingTypeCol" prefWidth="220.0" text="遥信类型" />
+                                         <TreeTableColumn fx:id="operationCol" prefWidth="220.0" text="操作" />
+                                     </columns>
+                                     <padding>
+                                        <Insets bottom="10.0" />
+                                     </padding>
+                                 </TreeTableView>
+                             </content>
+                         </ScrollPane>
+                     </StackPane>
+                 </items>
+               </SplitPane>
+            </children>
+         </AnchorPane>
+     </items>
+   </SplitPane>
+
+</AnchorPane>

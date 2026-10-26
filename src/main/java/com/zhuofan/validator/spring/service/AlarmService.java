@@ -24,7 +24,6 @@ import org.apache.logging.log4j.util.Strings;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
-import com.zhuofan.validator.spring.mapper.AlarmRuleMapper;
 import com.zhuofan.validator.spring.event.DeviceFlushEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
@@ -391,8 +390,8 @@ public class AlarmService {
         List<Future<List<DeviceSCADAInputInfo>>> futures = new ArrayList<>();
 
         // substation---voltage
-        List<Substation> allSubstation = dataService.findAllSubstation();
-        Map<String, String> allSubstationVoltageMap = Optional.ofNullable(allSubstation).orElse(Collections.emptyList()).stream().collect(Collectors.toMap(Substation::getName, Substation::getVoltage, (e1,e2) -> e2));
+        List<SubstationModel> allSubstationModel = dataService.findAllSubstation();
+        Map<String, String> allSubstationVoltageMap = Optional.ofNullable(allSubstationModel).orElse(Collections.emptyList()).stream().collect(Collectors.toMap(SubstationModel::getName, SubstationModel::getVoltage, (e1, e2) -> e2));
 
         for (Map.Entry<SheetInfo, List<DeviceSCADAInputInfo>> entry : deviceSCADAInputInfoMap.entrySet()) {
             List<DeviceSCADAInputInfo> deviceSCADAInputInfos = entry.getValue();

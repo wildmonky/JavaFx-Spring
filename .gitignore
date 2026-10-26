@@ -12,6 +12,7 @@ buildExe/*.msi
 .mvn
 /db
 /log
+/logs
 mvnw
 mvnw.cmd
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuofan.validator.spring.mapper.DeviceInfoMapper">
+
+    <select id="selectDeviceInfos" resultType="com.zhuofan.validator.spring.model.DeviceInfoModel">
+        SELECT
+        device.ID,
+        device.PARENT_ID,
+        device.NAME,
+        device.VOLTAGE,
+        device.TYPE,
+        device.BAY_NAME,
+        device.PATTERN_ID,
+        device.SIGNAL_TEMPLATE_ID,
+        temp.name as SIGNAL_TEMPLATE_NAME
+        FROM "DEVICE_INFO" device
+        LEFT JOIN SIGNAL_TEMPLATE temp on temp.id = device.signal_template_id
+        <where>
+            <if test="voltage != null and voltage != ''">
+                AND VOLTAGE = #{voltage}
+            </if>
+            <if test="type != null and type != ''">
+                AND TYPE = #{type}
+            </if>
+            <if test="name != null and name != ''">
+                AND NAME LIKE '%' || #{name} || '%'
+            </if>
+            <if test="id != null and id != ''">
+                AND ID = #{id}
+            </if>
+        </where>
+        ORDER BY VOLTAGE, TYPE, NAME
+    </select>
+
+</mapper>

@@ -2,7 +2,7 @@ package com.zhuofan.validator.spring.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.zhuofan.validator.spring.model.Substation;
+import com.zhuofan.validator.spring.model.SubstationModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -24,11 +24,11 @@ public class DataService {
      */
     private final PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
 
-    public List<Substation> findAllSubstation() {
+    public List<SubstationModel> findAllSubstation() {
         Gson gson = new Gson();
         try {
             Resource resource = pathMatchingResourcePatternResolver.getResource(substationJsonPath);
-            return gson.fromJson(new InputStreamReader(resource.getInputStream()), new TypeToken<List<Substation>>(){}.getType());
+            return gson.fromJson(new InputStreamReader(resource.getInputStream()), new TypeToken<List<SubstationModel>>(){}.getType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

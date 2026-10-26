@@ -8,6 +8,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -19,10 +20,12 @@ import java.rmi.RemoteException;
  */
 @Slf4j
 @MapperScan("com.zhuofan.validator.spring.mapper")
+@ComponentScan("com.zhuofan.validator")
 @EnableScheduling
 @SpringBootApplication
 public class MainApplication {
 
+//    // 测试spring 容器是否能正常启动
 //    public static void main(String[] args) {
 //
 ////        // 打印所有JVM参数
@@ -32,7 +35,7 @@ public class MainApplication {
 //        // 向jvm注册Spring Context关闭钩子
 ////        applicationContext.registerShutdownHook();
 //        // 启动JavaFx
-//        JavaFxApplication.launch(JavaFxApplication.class, args);
+////        JavaFxApplication.launch(JavaFxApplication.class, args);
 //    }
 
     /**

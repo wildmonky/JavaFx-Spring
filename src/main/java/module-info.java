@@ -43,11 +43,27 @@ module com.zhuofan.validator {
     requires java.desktop;
     requires java.rmi;
     requires java.management.rmi;
+//    requires com.gluonhq.charm.glisten;
+//    requires com.gluonhq.attach.util;
+    requires atlantafx.base;
+    requires org.apache.commons.codec;
+    requires easyexcel.core;
+    requires devtoolsfx.gui;
+    requires devtoolsfx.connector;
+    requires org.controlsfx.controls;
 
     exports com.zhuofan.validator;
+    exports com.zhuofan.validator.javafx.properties;
     exports com.zhuofan.validator.javafx.event;
     exports com.zhuofan.validator.javafx.controller to javafx.fxml, spring.beans;
     opens com.zhuofan.validator.javafx.controller to javafx.fxml, spring.core;
+    exports com.zhuofan.validator.javafx.service to javafx.fxml, spring.beans;
+    opens com.zhuofan.validator.javafx.service to javafx.fxml, spring.core;
+    exports com.zhuofan.validator.javafx.service.signal to spring.beans, spring.core;
+    opens com.zhuofan.validator.javafx.service.signal to spring.beans, spring.core;
+
+    exports com.zhuofan.validator.javafx.service.signal.template to spring.beans, spring.core;
+    opens com.zhuofan.validator.javafx.service.signal.template to spring.beans, spring.core;
 
     exports com.zhuofan.validator.spring.config;
     opens com.zhuofan.validator.spring.config to spring.core;
@@ -62,7 +78,7 @@ module com.zhuofan.validator {
     opens com.zhuofan.validator.spring.mapper;
 
     exports com.zhuofan.validator.spring.entity;
-    opens com.zhuofan.validator.spring.entity to com.baomidou.mybatis.plus.core;
+    opens com.zhuofan.validator.spring.entity;
 
     exports com.zhuofan.validator.spring.model;
     opens com.zhuofan.validator.spring.model to com.google.gson;
@@ -74,5 +90,12 @@ module com.zhuofan.validator {
     exports com.zhuofan.validator.spring;
     exports com.zhuofan.validator.spring.enums;
     exports com.zhuofan.validator.spring.event;
+    opens com.zhuofan.validator.javafx;
+    exports com.zhuofan.validator.javafx;
+    exports com.zhuofan.validator.javafx.preloader;
+    exports com.zhuofan.validator.javafx.service.device to javafx.fxml, spring.beans;
+    opens com.zhuofan.validator.javafx.service.device to javafx.fxml, spring.core;
 
+    exports com.zhuofan.validator.javafx.component;
+    opens com.zhuofan.validator.javafx.component;
 }
