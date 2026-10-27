@@ -66,7 +66,7 @@
                       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="信号模板" wrappingWidth="68.33333206176758" GridPane.rowIndex="4" />
                       <ComboBox fx:id="modalSignalTemplate" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="间隔" textAlignment="RIGHT" GridPane.rowIndex="3" />
-                       <ComboBox fx:id="modalBay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                       <TextField fx:id="modalBay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                        <HBox prefHeight="100.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                         <children>
                            <AnchorPane prefHeight="200.0" prefWidth="200.0">

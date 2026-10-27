@@ -4,7 +4,6 @@ import atlantafx.base.theme.Styles;
 import com.zhuofan.validator.javafx.JavaFxServiceUtils;
 import com.zhuofan.validator.javafx.JavaFxUiUtils;
 import com.zhuofan.validator.javafx.component.SearchableComboBoxTreeTableCell;
-import com.zhuofan.validator.javafx.component.SelectorTreeTableCell;
 import com.zhuofan.validator.javafx.properties.DeviceInfoNode;
 import com.zhuofan.validator.javafx.service.device.*;
 import com.zhuofan.validator.spring.entity.DeviceInfo;
@@ -16,6 +15,7 @@ import jakarta.annotation.Resource;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -32,7 +32,6 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
-import org.controlsfx.control.SearchableComboBox;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
@@ -75,7 +74,7 @@ public class DeviceListController extends Control{
     public ComboBox<String> modalDeviceType;
     public ComboBox<String> modalVoltageLevel;
     public ComboBox<SignalTemplate> modalSignalTemplate;
-    public ComboBox<String> modalBay;
+    public TextField modalBay;
 
     @Setter
     private ProgressIndicator progressIndicator;
@@ -98,6 +97,8 @@ public class DeviceListController extends Control{
     private DeviceInfoService deviceInfoService;
 
     private DeviceInfoNode parent;
+
+    private DeviceInfoNode editNode;
 
     /**
      * 初始化
@@ -128,6 +129,8 @@ public class DeviceListController extends Control{
                 setText(empty || item == null ? null : item.getName());
             }
         });
+
+        modalBay.setEditable(true);
 
         // 初始化查询数据
         this.searchButton.fire();
@@ -309,7 +312,9 @@ public class DeviceListController extends Control{
                     });
 
                     // 编辑modal 设置
+                    this.modalDeviceType.setEditable(true);
                     this.modalDeviceType.setItems(FXCollections.observableArrayList(deviceTypes));
+                    this.modalVoltageLevel.setEditable(true);
                     this.modalVoltageLevel.setItems(FXCollections.observableArrayList(voltages));
                 }
         );
@@ -385,55 +390,46 @@ public class DeviceListController extends Control{
 
             private final HBox buttonBox = new HBox(3);
             private final Button addButton = new Button("新增子设备");
-//            private final Button editButton = new Button("编辑");
+            private final Button editButton = new Button("编辑");
             private final Button delButton = new Button("删除");
 
             {
-                addButton.getStyleClass().add(Styles.SMALL);
-                delButton.getStyleClass().add(Styles.SMALL);
-                buttonBox.getChildren().addAll(addButton, delButton);
+                buttonBox.getChildren().addAll(editButton, addButton, delButton);
                 buttonBox.setAlignment(Pos.CENTER);
                 buttonBox.setMaxHeight(Region.USE_PREF_SIZE);
                 buttonBox.setPrefHeight(30);
-//                buttonBox.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 setAlignment(Pos.CENTER);
 
-                addButton.getStyleClass().addAll("button-outlined", "success");
+                addButton.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.SUCCESS);
                 addButton.setOnAction(event -> {
                     // 获取被点击按钮所在的当前TreeItem对象
                     TreeItem<DeviceInfoNode> treeItem = getTableRow().getTreeItem();
                     if (treeItem != null) {
                         DeviceInfoNode itemData = treeItem.getValue();
                         System.out.println("add Button clicked for: " + itemData.getName());
-                        // 在这里执行业务逻辑，例如：
-                        // 删除该项: treeItem.getParent().getChildren().remove(treeItem);
                         // 展示编辑框
                         setModalDataThenShow(itemData, null);
                     }
                 });
 
-//                editButton.getStyleClass().addAll("button-outlined", "success");
-//                editButton.setOnAction(event -> {
-//                    // 获取被点击按钮所在的当前TreeItem对象
-//                    TreeItem<DeviceInfoNode> treeItem = getTableRow().getTreeItem();
-//                    if (treeItem != null) {
-//                        DeviceInfoNode itemData = treeItem.getValue();
-//                        System.out.println("edit Button clicked for: " + itemData.getName());
-//                        // 在这里执行业务逻辑，例如：
-//                        // 删除该项: treeItem.getParent().getChildren().remove(treeItem);
-//                        // 展示编辑框
-////                        setEditModalDataThenShow(null, treeItem);
-//                    }
-//                });
+                editButton.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.ACCENT);
+                editButton.setOnAction(event -> {
+                    // 获取被点击按钮所在的当前TreeItem对象
+                    TreeItem<DeviceInfoNode> treeItem = getTableRow().getTreeItem();
+                    if (treeItem != null) {
+                        DeviceInfoNode itemData = treeItem.getValue();
+                        // 展示编辑框
+                        setModalDataThenShow(null, itemData);
+                    }
+                });
 
-                delButton.getStyleClass().addAll("button-outlined", "danger");
+                delButton.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.DANGER);
                 delButton.setOnAction(event -> {
                     // 获取被点击按钮所在的当前TreeItem对象
                     TreeItem<DeviceInfoNode> treeItem = getTableRow().getTreeItem();
                     if (treeItem != null) {
                         DeviceInfoNode itemData = treeItem.getValue();
-//                        System.out.println("del Button clicked for: " + itemData.getName());
                         // 在这里执行业务逻辑，例如：
                         treeItem.getParent().getChildren().remove(treeItem);
                         boolean result = remove(itemData);
@@ -458,7 +454,6 @@ public class DeviceListController extends Control{
                     setGraphic(null);
                 } else {
                     setGraphic(buttonBox);
-//                    requestLayout();
                 }
             }
         };
@@ -477,12 +472,20 @@ public class DeviceListController extends Control{
         }
 
         this.parent = parent;
+        this.editNode = currentNode;
         this.modalDeviceName.setText(node.getName());
         this.modalDeviceType.setValue(node.getType());
         this.modalVoltageLevel.setValue(node.getVoltage());
+        this.modalBay.setText(node.getBayName());
         SignalTemplate template = null;
         if (node.getSignalTemplateId() != null) {
-
+            ObservableList<SignalTemplate> items = modalSignalTemplate.getItems();
+            if (items != null) {
+                DeviceInfoNode finalNode = node;
+                template = items.stream()
+                        .filter(e -> Objects.equals(e.getId(), finalNode.getSignalTemplateId()))
+                        .findFirst().orElse(null);
+            }
         }
         this.modalSignalTemplate.setValue(template);
 
@@ -491,13 +494,8 @@ public class DeviceListController extends Control{
     }
 
     public void hideModal(ActionEvent event) {
-        // 重置修改modal终端的数据
-        // 删除保存按钮触发方法
-//        this.editSaveButton.setOnAction(null);
         // 清空 修改modal终端的数据
-        this.modalDeviceName.setText(null);
-        this.modalDeviceType.setValue(null);
-        this.modalVoltageLevel.setValue(null);
+        cleanModalData();
         showTable(event);
     }
 
@@ -528,8 +526,12 @@ public class DeviceListController extends Control{
         String deviceType = this.modalDeviceType.getSelectionModel().getSelectedItem();
         String voltage = this.modalVoltageLevel.getSelectionModel().getSelectedItem();
         SignalTemplate selectedSignalTemplate = this.modalSignalTemplate.getSelectionModel().getSelectedItem();
+        String bay = this.modalBay.getText();
 
         DeviceInfo deviceInfo = new DeviceInfo();
+        if (this.editNode != null) {
+            deviceInfo.setId(this.editNode.getId());
+        }
         if (this.parent != null) {
             deviceInfo.setParentId(parent.getId());
         }
@@ -539,6 +541,7 @@ public class DeviceListController extends Control{
         if (selectedSignalTemplate != null) {
             deviceInfo.setSignalTemplateId(selectedSignalTemplate.getId());
         }
+        deviceInfo.setBayName(bay);
         return deviceInfo;
     }
 
@@ -548,6 +551,7 @@ public class DeviceListController extends Control{
         this.modalDeviceType.getSelectionModel().clearSelection();
         this.modalVoltageLevel.getSelectionModel().clearSelection();
         this.modalSignalTemplate.getSelectionModel().clearSelection();
+        this.modalBay.setText(null);
     }
 
     //--------------------------------------------------- Spring Bean ----------------------------------------------------------------
