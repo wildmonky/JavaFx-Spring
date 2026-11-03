@@ -1,12 +1,7 @@
-package com.zhuofan.validator.javafx.service.signal.template;
+package com.zhuofan.validator.spring.service;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelReader;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.read.listener.ReadListener;
-import com.alibaba.excel.read.metadata.ReadSheet;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.zhuofan.validator.javafx.properties.SignalTemplateDetailProperty;
+import com.zhuofan.validator.javafx.properties.SignalTemplateDetailProp;
 import com.zhuofan.validator.spring.entity.SignalTemplate;
 import com.zhuofan.validator.spring.entity.SignalTemplateDetail;
 import com.zhuofan.validator.spring.mapper.SignalTemplateDetailMapper;
@@ -17,6 +12,11 @@ import com.zhuofan.validator.spring.utils.CollectionUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.fesod.sheet.ExcelReader;
+import org.apache.fesod.sheet.FesodSheet;
+import org.apache.fesod.sheet.context.AnalysisContext;
+import org.apache.fesod.sheet.read.listener.ReadListener;
+import org.apache.fesod.sheet.read.metadata.ReadSheet;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class SignalTemplateService {
 
         try {
             // 1. POI 解析excel文件,提取数据
-            ExcelReader reader = EasyExcel.read().file(file).head(SignalTemplateDetail.class).registerReadListener(new ReadListener<SignalTemplateDetail>() {
+            ExcelReader reader = FesodSheet.read().file(file).head(SignalTemplateDetail.class).registerReadListener(new ReadListener<SignalTemplateDetail>() {
                 @Override
                 public void invoke(SignalTemplateDetail data, AnalysisContext context) {
                     String sheetName = context.readSheetHolder().getSheetName();
@@ -152,7 +152,7 @@ public class SignalTemplateService {
         return true;
     }
 
-    public List<SignalTemplateDetailProperty> searchDetails(SignalTemplateDetailModel param) {
+    public List<SignalTemplateDetailProp> searchDetails(SignalTemplateDetailModel param) {
         if (param == null) {
             return Collections.emptyList();
         }
@@ -161,7 +161,7 @@ public class SignalTemplateService {
                 .eq(param.getTemplateId() != null, SignalTemplateDetail::getTemplateId, param.getTemplateId())
                 .like(StringUtils.isNotBlank(param.getType()), SignalTemplateDetail::getType, param.getType())
                 .like(StringUtils.isNotBlank(param.getSample()), SignalTemplateDetail::getSample, param.getSample())
-        ).stream().map(SignalTemplateDetailProperty::new).toList();
+        ).stream().map(SignalTemplateDetailProp::new).toList();
     }
 
     public List<SignalTemplateModel> searchTemplateByName(String templateName) {

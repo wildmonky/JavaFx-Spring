@@ -20,7 +20,6 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
@@ -624,7 +623,7 @@ public class AlarmService {
 
             List<Device> devices = info.getDevices();
             if (CollectionUtils.isNotEmpty(devices)) {
-                String checkInfo = Optional.ofNullable(info.getWarnInfo()).orElse(Strings.EMPTY).replaceFirst(Optional.ofNullable(info.getVoltage()).orElse(Strings.EMPTY), "");
+                String checkInfo = Optional.ofNullable(info.getWarnInfo()).orElse("").replaceFirst(Optional.ofNullable(info.getVoltage()).orElse(""), "");
                 boolean isMatch = false;
                 for (int i = 0; i < devices.size(); i++) {
                     List<Device> subDevices = devices.subList(0, i + 1);
@@ -640,7 +639,7 @@ public class AlarmService {
 //                            info.setCost(Duration.between(startTime, LocalDateTime.now()).toMillis());
                             continue;
                         }
-                        checkInfo = checkInfo.replaceFirst(Optional.of(subDevice.getName()).orElse(Strings.EMPTY), "");
+                        checkInfo = checkInfo.replaceFirst(Optional.of(subDevice.getName()).orElse(""), "");
                     }
 
                     if (BooleanUtils.isNotTrue(device.getCheckResult())) {
@@ -683,7 +682,7 @@ public class AlarmService {
                 }
                 // 都没匹配上，未配置
                 if (!isMatch) {
-                    Matcher excludeMatcher = excludePattern.matcher(Optional.ofNullable(info.getWarnInfo()).orElse(Strings.EMPTY));
+                    Matcher excludeMatcher = excludePattern.matcher(Optional.ofNullable(info.getWarnInfo()).orElse(""));
                     if (excludeMatcher.matches() || info.getWarnInfo().contains("接地开关")) {
                         appendTips("“地刀”、“接地开关”改为“接地刀闸”", info);
                     } else {
@@ -757,13 +756,13 @@ public class AlarmService {
         for (AlarmTypeRuleModel infoTypeRuleModel : infoTypeRuleModels) {
 
             // FIXME 测试用 上线注释
-//            if (Optional.ofNullable(infoTypeRuleModel.getName()).orElse(Strings.EMPTY).contains("继电器")) {
+//            if (Optional.ofNullable(infoTypeRuleModel.getName()).orElse("").contains("继电器")) {
 //                System.out.println();
 //            }
             String ruleCheckInfo = checkInfo;
             if (BooleanUtils.isTrue(infoTypeRuleModel.getRuleIncludeDeviceName())
                 && Objects.equals(device.getId(), infoTypeRuleModel.getDeviceId())) {
-                    ruleCheckInfo = Optional.ofNullable(device.getName()).orElse(Strings.EMPTY) + checkInfo;
+                    ruleCheckInfo = Optional.ofNullable(device.getName()).orElse("") + checkInfo;
             }
             ruleCheckInfo = BooleanUtils.isTrue(infoTypeRuleModel.getRuleFullTextMatch()) ? info.getWarnInfo() : ruleCheckInfo;
             // 匹配 规范信息
@@ -805,7 +804,7 @@ public class AlarmService {
             String typeCheckInfo = checkInfo;
             if (BooleanUtils.isTrue(infoTypeRuleModel.getIncludeDeviceName())
                 && Objects.equals(device.getId(), infoTypeRuleModel.getDeviceId())) {
-                typeCheckInfo = Optional.ofNullable(device.getName()).orElse(Strings.EMPTY) + checkInfo;
+                typeCheckInfo = Optional.ofNullable(device.getName()).orElse("") + checkInfo;
             }
             typeCheckInfo = BooleanUtils.isTrue(infoTypeRuleModel.getFullTextMatch()) ? info.getWarnInfo() : typeCheckInfo;
             // 匹配 信息类型
@@ -894,7 +893,7 @@ public class AlarmService {
                 pattern = Pattern.compile(patternStr);
                 Matcher matcher = pattern.matcher(words);
                 // :号 分割
-                String[] notCatchMessage = Optional.ofNullable(deviceSCADARegex.getNotMatchMessage()).orElse(Strings.EMPTY).split(":");
+                String[] notCatchMessage = Optional.ofNullable(deviceSCADARegex.getNotMatchMessage()).orElse("").split(":");
                 if (matcher.matches()) {
                     // 存在捕获组
                     int groupCount = matcher.groupCount();
@@ -1131,12 +1130,12 @@ public class AlarmService {
      */
     private String checkVoltage(Device device, DeviceTypeEnum deviceTypeEnum, String voltage, DeviceSCADAInputInfo info, Map<String, String> substationVoltageMap) {
         if (!deviceTypeEnum.isNeedVoltage()) {
-            return Strings.EMPTY;
+            return "";
         }
         // 无电压主变 通过
         if (deviceTypeEnum == DeviceTypeEnum.MAIN_TRANSFORMER) {
             if (StringUtils.isBlank(voltage)) {
-                return Strings.EMPTY;
+                return "";
             }
             // 主变信号 电压检测
 //            Pattern stationPattern = Pattern.compile("^/(.*站)/");
@@ -1149,7 +1148,7 @@ public class AlarmService {
 //                }
 //            }
         }
-        String result = Strings.EMPTY;
+        String result = "";
 
         // 电容/抗器组 AVC 无电压 默认 66kV
         if (deviceTypeEnum == DeviceTypeEnum.CAPACITANCE_AND_REACTANCE

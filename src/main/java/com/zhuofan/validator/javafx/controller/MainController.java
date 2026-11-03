@@ -1,6 +1,7 @@
 package com.zhuofan.validator.javafx.controller;
 
-//import com.gluonhq.charm.glisten.control.ProgressIndicator;
+import com.zhuofan.validator.javafx.controller.deviceSignal.DeviceListController;
+import com.zhuofan.validator.javafx.controller.deviceSignal.DeviceSignalController;
 import jakarta.annotation.Resource;
 import javafx.fxml.FXML;
 
@@ -25,12 +26,11 @@ public class MainController {
     // 0.0 ---> 1.0
     @FXML
     public ProgressIndicator progressIndicator;
-    public AnchorPane signalList;
+
     @FXML
     private Pane analysis;
     @FXML
     public AnchorPane build;
-    public AnchorPane deviceList;
     /**
      * 注意 在 main.fxml中引入时，fx:id必须是analysis，这时才能自动注入analysisController
      */
@@ -43,7 +43,6 @@ public class MainController {
     @Resource
     public DeviceListController deviceListController;
 
-    public AnchorPane deviceSignalList;
     @Resource
     public DeviceSignalController deviceSignalController;
 

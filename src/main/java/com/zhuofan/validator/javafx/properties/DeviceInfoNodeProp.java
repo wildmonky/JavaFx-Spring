@@ -1,6 +1,5 @@
 package com.zhuofan.validator.javafx.properties;
 
-import com.zhuofan.validator.spring.entity.DeviceInfo;
 import com.zhuofan.validator.spring.model.DeviceInfoModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -11,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Slf4j
-public class DeviceInfoNode extends DeviceInfoModel {
+public class DeviceInfoNodeProp extends DeviceInfoModel {
 
     private StringProperty nameProp = new SimpleStringProperty();
 
@@ -25,7 +24,7 @@ public class DeviceInfoNode extends DeviceInfoModel {
 
     private StringProperty bayNameProp = new SimpleStringProperty();
 
-    public DeviceInfoNode() {
+    public DeviceInfoNodeProp() {
         super();
         // 变更监听
         nameProp.addListener((observable, oldValue, newValue) -> {
@@ -33,7 +32,7 @@ public class DeviceInfoNode extends DeviceInfoModel {
         });
     }
 
-    public DeviceInfoNode(DeviceInfoModel deviceInfo) {
+    public DeviceInfoNodeProp(DeviceInfoModel deviceInfo) {
         super();
         super.setId(deviceInfo.getId());
         super.setParentId(deviceInfo.getParentId());

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="679.0" prefWidth="1262.0" stylesheets="@css/signal.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zhuofan.validator.javafx.controller.DeviceSignalController">
+<AnchorPane prefHeight="679.0" prefWidth="1262.0" stylesheets="@css/signal.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zhuofan.validator.javafx.controller.deviceSignal.DeviceSignalController">
    <SplitPane dividerPositions="0.24528301886792453" layoutX="19.0" layoutY="10.0" prefHeight="661.0" prefWidth="1219.0">
      <items>
        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="536.0" prefWidth="379.0">

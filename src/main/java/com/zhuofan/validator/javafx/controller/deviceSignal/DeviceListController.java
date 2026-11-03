@@ -1,15 +1,15 @@
-package com.zhuofan.validator.javafx.controller;
+package com.zhuofan.validator.javafx.controller.deviceSignal;
 
 import atlantafx.base.theme.Styles;
-import com.zhuofan.validator.javafx.JavaFxServiceUtils;
-import com.zhuofan.validator.javafx.JavaFxUiUtils;
+import com.zhuofan.validator.javafx.utils.JavaFxServiceUtils;
+import com.zhuofan.validator.javafx.utils.JavaFxUiUtils;
 import com.zhuofan.validator.javafx.component.SearchableComboBoxTreeTableCell;
-import com.zhuofan.validator.javafx.properties.DeviceInfoNode;
-import com.zhuofan.validator.javafx.service.device.*;
+import com.zhuofan.validator.javafx.properties.DeviceInfoNodeProp;
 import com.zhuofan.validator.spring.entity.DeviceInfo;
 import com.zhuofan.validator.spring.entity.SignalTemplate;
 import com.zhuofan.validator.spring.mapper.DeviceInfoMapper;
 import com.zhuofan.validator.spring.model.DeviceInfoModel;
+import com.zhuofan.validator.spring.service.DeviceInfoService;
 import com.zhuofan.validator.spring.utils.SpringUtils;
 import jakarta.annotation.Resource;
 import javafx.beans.property.SimpleListProperty;
@@ -31,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 
@@ -58,15 +56,15 @@ public class DeviceListController extends Control{
     // 数据区域
     public StackPane stackPane;
     // 数据区域1-表格数据组件
-    public TreeTableView<DeviceInfoNode> deviceDataTable;
-    public TreeTableColumn<DeviceInfoNode, String> deviceNameCol;
-    public TreeTableColumn<DeviceInfoNode, String> deviceTypeCol;
-    public TreeTableColumn<DeviceInfoNode, String> voltageLevelCol;
-    public TreeTableColumn<DeviceInfoNode, String> bayCol;
-    public TreeTableColumn<DeviceInfoNode, SignalTemplate> templateCol;
-    public TreeTableColumn<DeviceInfoNode, String> operationCol;
+    public TreeTableView<DeviceInfoNodeProp> deviceDataTable;
+    public TreeTableColumn<DeviceInfoNodeProp, String> deviceNameCol;
+    public TreeTableColumn<DeviceInfoNodeProp, String> deviceTypeCol;
+    public TreeTableColumn<DeviceInfoNodeProp, String> voltageLevelCol;
+    public TreeTableColumn<DeviceInfoNodeProp, String> bayCol;
+    public TreeTableColumn<DeviceInfoNodeProp, SignalTemplate> templateCol;
+    public TreeTableColumn<DeviceInfoNodeProp, String> operationCol;
     // 表格数据 根节点
-    private final TreeItem<DeviceInfoNode> dataRoot = new TreeItem<>();
+    private final TreeItem<DeviceInfoNodeProp> dataRoot = new TreeItem<>();
 
     // 数据区域2-编辑区域
     public Pane modal;
@@ -80,32 +78,20 @@ public class DeviceListController extends Control{
     private ProgressIndicator progressIndicator;
 
     @Resource
-    private SearchService searchService;
-
-    @Resource
-    private SaveService saveService;
-
-    @Resource
-    private JavaFxDeviceService javaFxDeviceService;
-
-    @Resource
-    private ThreadPoolTaskExecutor executor;
-
-    private final JavaFxServiceUtils asyncServiceUtils = new JavaFxServiceUtils();
+    private JavaFxServiceUtils serviceUtils;
 
     @Resource
     private DeviceInfoService deviceInfoService;
 
-    private DeviceInfoNode parent;
+    private DeviceInfoNodeProp parent;
 
-    private DeviceInfoNode editNode;
+    private DeviceInfoNodeProp editNode;
 
     /**
      * 初始化
      */
     @FXML
     public void initialize() {
-        asyncServiceUtils.setExecutor(executor);
         // 表格初始化
         initTable();
         // 电压、设备类型初始化
@@ -144,14 +130,6 @@ public class DeviceListController extends Control{
         // 绑定数据
         this.deviceDataTable.rootProperty().bind(new SimpleObjectProperty<>(dataRoot));
 
-        saveService.valueProperty().addListener((observable, oldVal, newVal) -> {
-            if (BooleanUtils.isTrue(newVal)) {
-                JavaFxUiUtils.alertMessage(Alert.AlertType.INFORMATION, "修改成功", Duration.millis(3000));
-            } else if (BooleanUtils.isFalse(newVal)) {
-                JavaFxUiUtils.alertMessage(Alert.AlertType.ERROR, "修改失败", Duration.millis(3000));
-            }
-        });
-
 //        this.deviceDataTable.setRowFactory(tableView -> {
 //            TreeTableRow<DeviceInfoNode> row = new TreeTableRow<>();
 //            row.setMinHeight(40);
@@ -161,7 +139,7 @@ public class DeviceListController extends Control{
 //        deviceData.setRoot(new TreeItem<>(null));
 //        deviceData.setShowRoot(false);
         deviceNameCol.setCellFactory(col -> {
-            TextFieldTreeTableCell<DeviceInfoNode, String> cell = new TextFieldTreeTableCell<>() {
+            TextFieldTreeTableCell<DeviceInfoNodeProp, String> cell = new TextFieldTreeTableCell<>() {
                 private boolean focusCommitAdded = false;
                 @Override
                 public void startEdit() {
@@ -184,95 +162,111 @@ public class DeviceListController extends Control{
         });
         deviceNameCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
         deviceNameCol.setOnEditCommit(event -> {
-            if (Strings.CS.equals(event.getOldValue(), event.getNewValue())) {
+            if (StringUtils.equals(event.getOldValue(), event.getNewValue())) {
                 return;
             }
             String newValue = event.getNewValue();
-            TreeItem<DeviceInfoNode> row = event.getRowValue();
-            DeviceInfoNode value = row.getValue();
+            TreeItem<DeviceInfoNodeProp> row = event.getRowValue();
+            DeviceInfoNodeProp value = row.getValue();
             value.setName(newValue);
 
-            saveService.setDeviceInfo(value);
-            saveService.restart();
+            saveDeviceInfo(value);
         });
 
         deviceTypeCol.setCellValueFactory(cellData -> {
-            DeviceInfoNode property = cellData.getValue().getValue();
+            DeviceInfoNodeProp property = cellData.getValue().getValue();
             return property == null ? null : property.getTypeProp();
         });
         deviceTypeCol.setOnEditCommit(handler -> {
-            TreeItem<DeviceInfoNode> rowValue = handler.getRowValue();
+            TreeItem<DeviceInfoNodeProp> rowValue = handler.getRowValue();
             String newDeviceType = handler.getNewValue();
-            if (Strings.CS.equals(handler.getOldValue(), newDeviceType)) {
+            if (StringUtils.equals(handler.getOldValue(), newDeviceType)) {
                 return;
             }
-            DeviceInfoNode row = rowValue.getValue();
+            DeviceInfoNodeProp row = rowValue.getValue();
             row.setType(newDeviceType);
-            saveService.setDeviceInfo(row);
-            saveService.restart();
+            saveDeviceInfo(row);
         });
 
         voltageLevelCol.setCellValueFactory(cellData -> {
-            DeviceInfoNode property = cellData.getValue().getValue();
+            DeviceInfoNodeProp property = cellData.getValue().getValue();
             return property == null ? null : property.getVoltageLevelProp();
         });
         voltageLevelCol.setOnEditCommit(handler -> {
-            TreeItem<DeviceInfoNode> rowValue = handler.getRowValue();
+            TreeItem<DeviceInfoNodeProp> rowValue = handler.getRowValue();
             String newVoltageLevel = handler.getNewValue();
-            if (Strings.CS.equals(handler.getOldValue(), newVoltageLevel)) {
+            if (StringUtils.equals(handler.getOldValue(), newVoltageLevel)) {
                 return;
             }
             rowValue.getValue().setVoltage(newVoltageLevel);
-            saveService.setDeviceInfo(rowValue.getValue());
-            saveService.restart();
+            saveDeviceInfo(rowValue.getValue());
         });
 
         bayCol.setCellValueFactory(cellData -> {
-            DeviceInfoNode property = cellData.getValue().getValue();
+            DeviceInfoNodeProp property = cellData.getValue().getValue();
             return property == null ? null : property.getBayNameProp();
         });
         bayCol.setOnEditCommit(handler -> {
-            TreeItem<DeviceInfoNode> rowValue = handler.getRowValue();
+            TreeItem<DeviceInfoNodeProp> rowValue = handler.getRowValue();
             String newBay = handler.getNewValue();
-            if (Strings.CS.equals(handler.getOldValue(), newBay)) {
+            if (StringUtils.equals(handler.getOldValue(), newBay)) {
                 return;
             }
             rowValue.getValue().setBayName(newBay);
-            saveService.setDeviceInfo(rowValue.getValue());
-            saveService.restart();
+            saveDeviceInfo(rowValue.getValue());
         });
 
         // 信号模板列
         templateCol.setOnEditCommit(handler -> {
-            TreeItem<DeviceInfoNode> rowValue = handler.getRowValue();
+            TreeItem<DeviceInfoNodeProp> rowValue = handler.getRowValue();
             SignalTemplate item = handler.getNewValue();
             if (Objects.equals(handler.getOldValue(), item)) {
                 return;
             }
             rowValue.getValue().setSignalTemplateId(item == null ? null : item.getId());
-            saveService.setDeviceInfo(rowValue.getValue());
-            saveService.restart();
+            saveDeviceInfo(rowValue.getValue());
         });
 
         // 操作列 按键
         // 单元格值，不要设置为null，以便在页面刷新时按钮渲染判断
         operationCol.setCellValueFactory(cellData -> {
-            DeviceInfoNode property = cellData.getValue().getValue();
+            DeviceInfoNodeProp property = cellData.getValue().getValue();
             return property == null ? null : property.getNameProp();
         });
         operationCol.setCellFactory(this::operationColumnCellFactory);
+    }
 
-        this.searchService.valueProperty().addListener((obs, oldV, newV) -> {
-            this.dataRoot.getChildren().clear();
-            if (newV == null) {
-                return;
-            }
-            this.dataRoot.getChildren().addAll(newV.getChildren());
-        });
+    public void searchDeviceInfoTree(DeviceInfoModel param) {
+        serviceUtils.asyncRun(
+                () -> deviceInfoService.searchDeviceInfoTree(param),
+                (result, err) -> {
+                    this.dataRoot.getChildren().clear();
+                    if (result == null) {
+                        return;
+                    }
+                    this.dataRoot.getChildren().addAll(result.getChildren());
+                }
+        );
+    }
+
+    public void saveDeviceInfo(DeviceInfo deviceInfo) {
+        serviceUtils.asyncRun(
+                () -> deviceInfoService.save(deviceInfo),
+                (result, err) -> {
+                    if (err != null) {
+                        JavaFxUiUtils.alertMessage(Alert.AlertType.ERROR, err.getMessage(), Duration.millis(3000));
+                        return;
+                    }
+
+                    if (BooleanUtils.isTrue(result)) {
+                        JavaFxUiUtils.alertMessage(Alert.AlertType.INFORMATION, "修改成功", Duration.millis(3000));
+                    }
+                }
+        );
     }
 
     public void resetDeviceTypeAndVoltage() {
-        asyncServiceUtils.asyncRun(
+        serviceUtils.asyncRun(
                 () -> deviceInfoService.searchDeviceInfo(null),
                 (result, err) -> {
                     // 电压等级设置
@@ -291,22 +285,19 @@ public class DeviceListController extends Control{
 
                     // 间隔设置
                     List<String> bays = result.stream().map(DeviceInfo::getBayName).filter(StringUtils::isNotBlank).distinct().toList();
-//                    SimpleListProperty<String> bayProps = new SimpleListProperty<>(FXCollections.observableArrayList());
-//                    bayProps.add("所有");
-//                    bayProps.addAll(deviceTypes);
 
                     deviceTypeCol.setCellFactory(col -> {
-                        ComboBoxTreeTableCell<DeviceInfoNode, String> cell = new ComboBoxTreeTableCell<>(deviceTypes.toArray(new String[0]));
+                        ComboBoxTreeTableCell<DeviceInfoNodeProp, String> cell = new ComboBoxTreeTableCell<>(deviceTypes.toArray(new String[0]));
                         cell.setEditable(true);
                         return cell;
                     });
                     voltageLevelCol.setCellFactory(col -> {
-                        ComboBoxTreeTableCell<DeviceInfoNode, String> cell = new ComboBoxTreeTableCell <>(voltages.toArray(new String[0]));
+                        ComboBoxTreeTableCell<DeviceInfoNodeProp, String> cell = new ComboBoxTreeTableCell <>(voltages.toArray(new String[0]));
                         cell.setComboBoxEditable(true);
                         return cell;
                     });
                     bayCol.setCellFactory(col -> {
-                        ComboBoxTreeTableCell<DeviceInfoNode, String> cell = new ComboBoxTreeTableCell <>(bays.toArray(new String[0]));
+                        ComboBoxTreeTableCell<DeviceInfoNodeProp, String> cell = new ComboBoxTreeTableCell <>(bays.toArray(new String[0]));
                         cell.setComboBoxEditable(true);
                         return cell;
                     });
@@ -321,8 +312,8 @@ public class DeviceListController extends Control{
     }
 
     public void resetSignalTemplate() {
-        asyncServiceUtils.asyncRun(
-                () -> javaFxDeviceService.findSignalTemplates(null),
+        serviceUtils.asyncRun(
+                () -> deviceInfoService.findSignalTemplates(null),
                 (data, e) -> {
                     if (e != null) {
                         log.error("模板查询异常", e);
@@ -331,21 +322,11 @@ public class DeviceListController extends Control{
                     modalSignalTemplate.setItems(FXCollections.observableArrayList(data));
                     Map<String, SignalTemplate> templateIdMap = data.stream().collect(Collectors.toMap(SignalTemplate::getId, it -> it));
                     templateCol.setCellValueFactory(cellData -> {
-                        DeviceInfoNode row = cellData.getValue().getValue();
+                        DeviceInfoNodeProp row = cellData.getValue().getValue();
                         return new SimpleObjectProperty<>(templateIdMap.get(row.getSignalTemplateId()));
                     });
                     templateCol.setCellFactory(col -> {
-//                        SelectorTreeTableCell<DeviceInfoNode, SignalTemplate, String> cell =
-//                                new SelectorTreeTableCell<>(
-//                                        DeviceInfo::getSignalTemplateId,
-//                                        SignalTemplate::getId,
-//                                        SignalTemplate::getName,
-//                                        data
-//                                );
-//                        cell.setComboBoxEditable(true);
-//                        return cell;
-//                        ComboBoxTreeTableCell<DeviceInfoNode, String> cell = new ComboBoxTreeTableCell<>();
-                        SearchableComboBoxTreeTableCell<DeviceInfoNode, SignalTemplate, String> cell = new SearchableComboBoxTreeTableCell<>(
+                        SearchableComboBoxTreeTableCell<DeviceInfoNodeProp, SignalTemplate, String> cell = new SearchableComboBoxTreeTableCell<>(
                                 (rowData, candidates) -> {
                                     if (CollectionUtils.isEmpty(candidates)) {
                                         return null;
@@ -375,8 +356,7 @@ public class DeviceListController extends Control{
         param.setType("所有".equals(deviceType) ? null : deviceType);
         param.setName(deviceName);
 
-        searchService.setParam(param);
-        searchService.restart();
+        searchDeviceInfoTree(param);
     }
 
     /**
@@ -385,7 +365,7 @@ public class DeviceListController extends Control{
      * @param column
      * @return
      */
-    private TreeTableCell<DeviceInfoNode, String> operationColumnCellFactory(TreeTableColumn<DeviceInfoNode, String> column) {
+    private TreeTableCell<DeviceInfoNodeProp, String> operationColumnCellFactory(TreeTableColumn<DeviceInfoNodeProp, String> column) {
         return new TreeTableCell<>() {
 
             private final HBox buttonBox = new HBox(3);
@@ -404,9 +384,9 @@ public class DeviceListController extends Control{
                 addButton.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.SUCCESS);
                 addButton.setOnAction(event -> {
                     // 获取被点击按钮所在的当前TreeItem对象
-                    TreeItem<DeviceInfoNode> treeItem = getTableRow().getTreeItem();
+                    TreeItem<DeviceInfoNodeProp> treeItem = getTableRow().getTreeItem();
                     if (treeItem != null) {
-                        DeviceInfoNode itemData = treeItem.getValue();
+                        DeviceInfoNodeProp itemData = treeItem.getValue();
                         System.out.println("add Button clicked for: " + itemData.getName());
                         // 展示编辑框
                         setModalDataThenShow(itemData, null);
@@ -416,9 +396,9 @@ public class DeviceListController extends Control{
                 editButton.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.ACCENT);
                 editButton.setOnAction(event -> {
                     // 获取被点击按钮所在的当前TreeItem对象
-                    TreeItem<DeviceInfoNode> treeItem = getTableRow().getTreeItem();
+                    TreeItem<DeviceInfoNodeProp> treeItem = getTableRow().getTreeItem();
                     if (treeItem != null) {
-                        DeviceInfoNode itemData = treeItem.getValue();
+                        DeviceInfoNodeProp itemData = treeItem.getValue();
                         // 展示编辑框
                         setModalDataThenShow(null, itemData);
                     }
@@ -427,9 +407,9 @@ public class DeviceListController extends Control{
                 delButton.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.DANGER);
                 delButton.setOnAction(event -> {
                     // 获取被点击按钮所在的当前TreeItem对象
-                    TreeItem<DeviceInfoNode> treeItem = getTableRow().getTreeItem();
+                    TreeItem<DeviceInfoNodeProp> treeItem = getTableRow().getTreeItem();
                     if (treeItem != null) {
-                        DeviceInfoNode itemData = treeItem.getValue();
+                        DeviceInfoNodeProp itemData = treeItem.getValue();
                         // 在这里执行业务逻辑，例如：
                         treeItem.getParent().getChildren().remove(treeItem);
                         boolean result = remove(itemData);
@@ -459,8 +439,8 @@ public class DeviceListController extends Control{
         };
     }
 
-    public void setModalDataThenShow(DeviceInfoNode parent, DeviceInfoNode currentNode) {
-        DeviceInfoNode node = new DeviceInfoNode();
+    public void setModalDataThenShow(DeviceInfoNodeProp parent, DeviceInfoNodeProp currentNode) {
+        DeviceInfoNodeProp node = new DeviceInfoNodeProp();
         if (ObjectUtils.allNull(parent, currentNode)) {
             // 创建无父节点的设备
         } else if (parent != null && currentNode == null) {
@@ -481,7 +461,7 @@ public class DeviceListController extends Control{
         if (node.getSignalTemplateId() != null) {
             ObservableList<SignalTemplate> items = modalSignalTemplate.getItems();
             if (items != null) {
-                DeviceInfoNode finalNode = node;
+                DeviceInfoNodeProp finalNode = node;
                 template = items.stream()
                         .filter(e -> Objects.equals(e.getId(), finalNode.getSignalTemplateId()))
                         .findFirst().orElse(null);
@@ -510,11 +490,12 @@ public class DeviceListController extends Control{
 
     public void save(ActionEvent actionEvent) {
         DeviceInfo modalData = getModalData();
-        asyncServiceUtils.asyncRun(() -> save(modalData), (result, err) -> {
+        serviceUtils.asyncRun(() -> save(modalData), (result, err) -> {
             if (err != null) {
                 JavaFxUiUtils.alertMessage(Alert.AlertType.ERROR, "保存失败", Duration.seconds(5));
                 return;
             }
+            JavaFxUiUtils.alertMessage(Alert.AlertType.INFORMATION, "保存成功", Duration.seconds(5));
             cleanModalData();
             JavaFxUiUtils.showView(stackPane, deviceDataTable);
             search(new ActionEvent(this, actionEvent.getTarget()));

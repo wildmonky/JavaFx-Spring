@@ -9,7 +9,7 @@ import org.springframework.beans.BeanUtils;
 
 @Slf4j
 @Getter
-public class SignalNode extends SignalModel {
+public class SignalNodeProp extends SignalModel {
 
     private StringProperty deviceNameProperty = new SimpleStringProperty();
 
@@ -25,7 +25,7 @@ public class SignalNode extends SignalModel {
 
     private StringProperty remoteSignalingTypeProp = new SimpleStringProperty();
 
-    public SignalNode() {
+    public SignalNodeProp() {
         super();
         // 变更监听
         typeProperty.addListener((observable, oldValue, newValue) -> {
@@ -33,7 +33,7 @@ public class SignalNode extends SignalModel {
         });
     }
 
-    public SignalNode(SignalModel signalModel) {
+    public SignalNodeProp(SignalModel signalModel) {
         super();
         BeanUtils.copyProperties(signalModel, this);
 

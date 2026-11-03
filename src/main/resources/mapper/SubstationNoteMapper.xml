@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhuofan.validator.spring.mapper.SubstationNoteMapper">
+    <select id="searchSubstationNotes" resultType="com.zhuofan.validator.spring.model.SubstationNoteModel">
+        select
+            note.*
+        from substation_note note
+        <where>
+            <if test="id != null and id != ''">
+                note.id = #{id}
+            </if>
+            <if test="category != null and category != ''">
+                note.category like '%' || #{category} || '%'
+            </if>
+            <if test="planDate != null">
+                note.plan_date = #{planDate}
+            </if>
+            <if test="status != null and status != ''">
+                note.status like '%' || #{status} || '%'
+            </if>
+            <if test="content != null and content != ''">
+                note.content like '%' || #{content} || '%'
+            </if>
+            <if test="comment != null and comment != ''">
+                note.comment like '%' || #{comment} || '%'
+            </if>
+        </where>
+        order by note.plan_date
+    </select>
+</mapper>

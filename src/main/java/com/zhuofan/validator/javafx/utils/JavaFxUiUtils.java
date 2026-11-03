@@ -1,12 +1,13 @@
-package com.zhuofan.validator.javafx;
+package com.zhuofan.validator.javafx.utils;
 
 import atlantafx.base.controls.ModalPane;
 import atlantafx.base.theme.Styles;
-import com.alibaba.excel.util.BooleanUtils;
-import com.alibaba.excel.util.StringUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -17,11 +18,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 @Slf4j
 public class JavaFxUiUtils {
@@ -191,7 +194,7 @@ public class JavaFxUiUtils {
         // TODO 强制创建skin,要不然显示空 !!!
         modalPane.applyCss();
         modalPane.layout();
-            // 展示
+        // 展示
         modalPane.show(vBox);
     }
 
@@ -203,6 +206,49 @@ public class JavaFxUiUtils {
         row.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(field, Priority.ALWAYS);
         return row;
+    }
+
+    public static <T> ObservableList<T> comoBoxBindFilter(ComboBox<T> selector,
+                                                          BiPredicate<T, String> filterPredicate,
+                                                          BiPredicate<T, String> equalPredicate
+    ) {
+        if (selector == null) {
+            return null;
+        }
+
+        ObservableList<T> observableList = FXCollections.observableArrayList();
+        FilteredList<T> filteredList = new FilteredList<>(observableList);
+        selector.setItems(filteredList);
+
+        selector.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
+            if (Objects.equals(oldVal, newVal)) {
+                return;
+            }
+
+            T selectedItem = selector.getSelectionModel().getSelectedItem();
+            if (selectedItem != null && equalPredicate.test(selectedItem, newVal)) {
+                return;
+            }
+            filteredList.setPredicate(s -> filterPredicate.test(s, newVal));
+
+            if (!filteredList.contains(selectedItem)) {
+                selector.getSelectionModel().clearSelection();
+            }
+
+        });
+
+        selector.setOnShowing(e -> {
+            SingleSelectionModel<T> selectionModel = selector.getSelectionModel();
+            T selectedItem = selectionModel.getSelectedItem();
+            if (selectedItem != null) {
+                Platform.runLater(() -> {
+                    filteredList.setPredicate(s -> true);
+                    selectionModel.select(selectedItem);
+                });
+            }
+        });
+
+        return observableList;
     }
 
 }

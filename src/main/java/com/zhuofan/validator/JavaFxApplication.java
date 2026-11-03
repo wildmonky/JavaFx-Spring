@@ -1,10 +1,10 @@
 package com.zhuofan.validator;
 
 import atlantafx.base.theme.PrimerLight;
+import com.zhuofan.validator.javafx.utils.JavaFxLoadUtils;
 import com.zhuofan.validator.javafx.preloader.AppProgressNotification;
 import com.zhuofan.validator.javafx.preloader.AppReadyPreloaderNotification;
 import com.zhuofan.validator.spring.MainApplication;
-import devtoolsfx.gui.GUI;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -53,11 +53,9 @@ public class JavaFxApplication extends Application {
 
         try {
             // fxml加载fxml初始化
-            FXMLLoader fxmlLoader = new FXMLLoader(JavaFxApplication.class.getResource("/view/main.fxml"));
-            // 设置ControllerFactory，交给spring管理，方便注入
-            fxmlLoader.setControllerFactory(SpringUtils::getBean);
+            FXMLLoader fxmlLoader = JavaFxLoadUtils.loadFXML(JavaFxApplication.class.getResource("/view/main.fxml"));
             notifyPreloader(new AppProgressNotification(0.6, "开始加载页面组件"));
-            Parent root = fxmlLoader.load();
+            Parent root = fxmlLoader.getRoot();
             // 完全透明，淡入
             root.setOpacity(0);
             notifyPreloader(new AppProgressNotification(0.7, "窗口初始化"));

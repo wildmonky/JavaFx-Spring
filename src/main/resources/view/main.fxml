@@ -9,7 +9,7 @@
 <Pane maxHeight="-Infinity"
       maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="700.0" prefWidth="1300.0" stylesheets="@css/main.css"
-      xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.zhuofan.validator.javafx.controller.MainController"
 >
    <TabPane layoutX="-1.0" prefHeight="700.0" prefWidth="1300.0" tabClosingPolicy="UNAVAILABLE">
@@ -30,13 +30,21 @@
        </Tab>
        <Tab text="信号模板">
            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="175.0" prefWidth="619.0">
-               <fx:include source="signalTemplate.fxml" fx:id="signalList" />
+               <fx:include source="signalTemplate.fxml" />
            </AnchorPane>
        </Tab>
        <Tab text="设备信号">
            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="175.0" prefWidth="619.0">
-               <fx:include source="deviceSignal.fxml" fx:id="deviceSignalList" />
+               <fx:include source="deviceSignal.fxml" />
            </AnchorPane>
+       </Tab>
+       <Tab text="站点备忘录">
+           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="175.0" prefWidth="619.0">
+               <fx:include source="stationNote.fxml" />
+           </AnchorPane>
+       </Tab>
+       <Tab text="检修单填写">
+           <fx:include source="workOrder/index.fxml" />
        </Tab>
    </TabPane>
 

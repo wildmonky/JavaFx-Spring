@@ -226,9 +226,10 @@ public class DeviceInfoSignalService {
                     continue;
                 }
 
+                int num = 1;
                 for (DeviceInfoSignal signal : signals) {
                     XSSFRow dataRow = sheet.createRow(rowIndex++);
-                    dataRow.createCell(0);
+                    dataRow.createCell(0).setCellValue(num++);
                     dataRow.createCell(1).setCellValue(signal.getSignal());
                     dataRow.createCell(2).setCellValue(signal.getBayName());
                     dataRow.createCell(3).setCellValue(signal.getNormalStatus());

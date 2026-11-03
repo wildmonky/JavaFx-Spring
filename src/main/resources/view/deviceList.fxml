@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="679.0" prefWidth="1262.0" stylesheets="@css/signal.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zhuofan.validator.javafx.controller.DeviceListController">
+<AnchorPane prefHeight="679.0" prefWidth="1262.0" stylesheets="@css/signal.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zhuofan.validator.javafx.controller.deviceSignal.DeviceListController">
     <Pane layoutX="13.0" layoutY="63.0" prefHeight="31.0" prefWidth="1249.0">
         <TextField fx:id="substationModel" layoutX="21.0" layoutY="4.0" prefHeight="38.0" prefWidth="165.0" promptText="变电站" />
         <ComboBox fx:id="voltageLevelSelector" editable="true" layoutX="224.0" layoutY="4.0" prefWidth="150.0" promptText="电压等级" />

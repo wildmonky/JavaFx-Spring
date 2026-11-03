@@ -11,6 +11,8 @@ import lombok.Setter;
 public class Substation {
 
     @TableId
+    private String id;
+
     private String name;
 
     private String voltage;

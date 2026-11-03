@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.dlsc.gemsfx.ExpandingTextArea?>
+<?import java.lang.String?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.TextArea?>
+<ScrollPane fx:id="maintenanceWorkOrder" fitToWidth="true" style="-fx-background: #f0f0f0; -fx-padding: 20;" stylesheets="@../css/form.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zhuofan.validator.javafx.controller.workOrder.MaintenanceWorkOrderController">
+    <StackPane maxHeight="Infinity" maxWidth="Infinity">
+        <GridPane fx:id="mainGrid" hgap="0" maxWidth="-Infinity" style="-fx-background-color: white;" vgap="0">
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints maxHeight="30.0" minHeight="20.0" prefHeight="21.0" />
+                <RowConstraints maxHeight="52.0" minHeight="0.0" prefHeight="30.0" />
+                <RowConstraints maxHeight="52.0" minHeight="0.0" prefHeight="31.0" />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints minHeight="40.0" />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints /> <!--25 行 自动化消缺设备-->
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints minHeight="40.0" />
+            </rowConstraints>
+            <columnConstraints>
+                <!-- 第0列：左侧大类 (申请填报、申请签发等) -->
+                <ColumnConstraints maxWidth="79.0" minWidth="30.0" prefWidth="79.0" />
+                <!-- 第1列：标签列 -->
+                <ColumnConstraints maxWidth="131.0" minWidth="81.0" prefWidth="129.0" />
+                <!-- 第2列：值列 -->
+                <ColumnConstraints maxWidth="164.0" minWidth="94.0" prefWidth="156.0" />
+                <!-- 第3列：标签列 -->
+                <ColumnConstraints maxWidth="134.0" minWidth="80.0" prefWidth="130.0" />
+                <!-- 第4列：值列 -->
+                <ColumnConstraints maxWidth="157.0" minWidth="88.0" prefWidth="137.0" />
+                <!-- 第5列：标签列 -->
+                <ColumnConstraints maxWidth="115.0" minWidth="54.0" prefWidth="108.0" />
+                <!-- 第6列：值列 -->
+                <ColumnConstraints maxWidth="144.0" minWidth="81.0" prefWidth="99.0" />
+                <!-- 第7列：最右侧标签/值 -->
+                <ColumnConstraints maxWidth="150.0" minWidth="84.0" prefWidth="132.0" />
+                <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+            </columnConstraints>
+
+            <!-- ================= 表头区 ================= -->
+            <Label alignment="CENTER" maxWidth="Infinity" styleClass="title-cell" text="自动化设备检修申请单" GridPane.columnSpan="8" GridPane.rowIndex="0">
+                <font><Font name="System Bold" size="22.0" /></font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="Infinity" text="盖章处:" textOverrun="CLIP" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                <styleClass>
+                    <String fx:value="noborder-left" />
+                    <String fx:value="noborder-right" />
+                </styleClass>
+            </Label>
+            <HBox alignment="CENTER" prefWidth="208.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                <children>
+                    <Label maxWidth="Infinity" prefHeight="19.0" prefWidth="139.0" styleClass="noborder-bottom" text="执行调度:" />
+                    <TextField fx:id="dispatchingAuthority" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="140.0" promptText="总调执行" />
+                </children>
+            </HBox>
+            <Label maxWidth="Infinity" styleClass="noborder-bottom" text="检修设备类型：" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+            <TextField fx:id="maintenanceEquipType" text="自动化设备检修" GridPane.columnIndex="7" GridPane.rowIndex="2" />
+
+            <!-- ================= 申请填报 ================= -->
+            <Label alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" style="-fx-border-width: 1 1 0 1;" styleClass="cell" text="申请填报" wrapText="true" GridPane.rowIndex="3" GridPane.rowSpan="27" />
+
+            <!-- 基础信息 行3-4 -->
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-width: 1 1 1 0;" text="申请单编号" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="orderCode" alignment="CENTER" promptText="XX供电局-2024120031" style="-fx-border-width: 1 1 1 0;" styleClass="cell, input" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-width: 1 1 1 0;" text="申请单位" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="orderUnit" alignment="CENTER" promptText="XX供电局" style="-fx-border-width: 1 1 1 0;" styleClass="cell, input" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-width: 1 1 1 0;" text="提交时间" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="orderCommitTime" alignment="CENTER" promptText="2024-12-18 16:26" style="-fx-border-width: 1 1 1 0;" styleClass="cell, input" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="申请负责人" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ComboBox fx:id="orderRequester" editable="true" promptText="张三" styleClass="cell, input" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="联系电话" GridPane.columnIndex="3" GridPane.rowIndex="4">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="orderRequestPhone" alignment="CENTER" promptText="138XXXXXXXX" styleClass="cell, input" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="检修类别" GridPane.columnIndex="5" GridPane.rowIndex="4">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="maintenanceType" alignment="CENTER" promptText="计划检修" styleClass="cell, input" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+
+            <!-- 许可方式 -->
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="许可方式" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="调度许可对象" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="5">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+
+            <TextField fx:id="allowType" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="厂站工作许可√" styleClass="cell" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.rowSpan="2" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="值班员" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="6">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="联系电话" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="6">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="dutyOperator" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="当值值班员" styleClass="cell" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+            <TextField fx:id="dutyOperatorPhone" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="0769-22829XXX" styleClass="cell" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="7" />
+
+            <!-- 地点与设备 -->
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="工作地点" GridPane.columnIndex="1" GridPane.rowIndex="8">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ComboBox fx:id="workLocation" editable="true" maxWidth="1.7976931348623157E308" promptText="500kV XX站" styleClass="cell, input" GridPane.columnIndex="2" GridPane.columnSpan="6" GridPane.rowIndex="8" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="停电/检修设备" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="maintenanceEquipments" alignment="CENTER" promptText="#2远动机;#1远动机;" styleClass="cell, input" GridPane.columnIndex="2" GridPane.columnSpan="6" GridPane.rowIndex="9" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="工作内容" GridPane.columnIndex="1" GridPane.rowIndex="10">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="workContent" promptText="配合220kVXX线XX开关保护装置程序升级，需要修改远动点表及远动保信配置" GridPane.columnIndex="2" GridPane.columnSpan="6" GridPane.rowIndex="10">
+                <styleClass>
+                    <String fx:value="cell" />
+                    <String fx:value="input" />
+                </styleClass>
+            </ExpandingTextArea>
+
+            <!-- 安全措施嵌套表 -->
+            <Label alignment="CENTER" maxHeight="Infinity" text="工作要求的安全措施（调度管辖设备）" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="11" GridPane.rowSpan="8">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+
+            <!-- 二次设备状态 -->
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="二次设备状态" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="11" GridPane.rowSpan="3">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="设备名称" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="11">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="设备状态" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="11">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+
+            <TextField alignment="CENTER" promptText="智能远动机" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="12" />
+            <TextField alignment="CENTER" promptText="带业务运行" styleClass="cell, input" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="12" />
+
+            <TextField alignment="CENTER" promptText="220kVXX线XX开关保护装置" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="13" />
+            <TextField alignment="CENTER" promptText="退出" styleClass="cell, input" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="13" />
+
+            <!-- 其他要求 -->
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="安自要求" GridPane.columnIndex="2" GridPane.rowIndex="14">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="azRequirement" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="14">
+                <styleClass>
+                    <String fx:value="cell" />
+                    <String fx:value="input" />
+                </styleClass>
+            </ExpandingTextArea>
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="保护要求" GridPane.columnIndex="2" GridPane.rowIndex="15">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="protectRequirement" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="15">
+                <styleClass>
+                    <String fx:value="cell" />
+                    <String fx:value="input" />
+                </styleClass>
+            </ExpandingTextArea>
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="通信要求" GridPane.columnIndex="2" GridPane.rowIndex="16">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="communicateRequirement" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="16">
+                <styleClass>
+                    <String fx:value="cell" />
+                    <String fx:value="input" />
+                </styleClass>
+            </ExpandingTextArea>
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="自动化要求" GridPane.columnIndex="2" GridPane.rowIndex="17">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="automaticRequirement" promptText="风险评估：1.工作过程中需要重启远动装置，影响调度监盘。2.当工作不规范或远动双机存在异常时，远动主备机切换或双主机通道切换时可能发生数据跳变。预控措施：1.工作前做好安全技术交底，做好工作监护；2.工作前后做好工作联系和工作申请，确保工作得到中调、地调调度自动化人员允许并做好远动装置重启安全措施：500kV线路有功P取人工对端代，地调挂全站停电检修牌，站端做好作业过程中的远动配置修改项、数据及通道状态的检查确认，避免因不规范作业造成远动上送主站数据异常，得到许可后才能开始工作；3.在修改配置工作前，做好相关数据及配置的备份；4.与总调、中调、地调自动化值班员进行数据核对，确认无误后方可解封，结束工作。" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="17">
+                <styleClass>
+                    <String fx:value="cell" />
+                    <String fx:value="input" />
+                </styleClass>
+            </ExpandingTextArea>
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="其他要求" GridPane.columnIndex="2" GridPane.rowIndex="18">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="otherRequirement" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="18">
+                <styleClass>
+                    <String fx:value="cell" />
+                    <String fx:value="input" />
+                </styleClass>
+            </ExpandingTextArea>
+
+            <!-- 时间区 -->
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="申请工作开始时间" GridPane.columnIndex="1" GridPane.rowIndex="19">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="workStartTime" alignment="center" promptText="2024-12-24 10:10" styleClass="cell, input" GridPane.columnIndex="2" GridPane.rowIndex="19" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="申请工作结束时间" GridPane.columnIndex="3" GridPane.rowIndex="19">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="workEndTime" alignment="CENTER" promptText="2024-12-24 18:00" styleClass="cell, input" GridPane.columnIndex="4" GridPane.rowIndex="19" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="申请工作时长" GridPane.columnIndex="5" GridPane.rowIndex="19">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="workDuration" alignment="center" styleClass="cell, input" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="19" />
+
+            <!-- 涉网影响 -->
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="涉及电网安全运行的影响" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="20" GridPane.rowSpan="6">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="是否影响自动化" GridPane.columnIndex="2" GridPane.rowIndex="20">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="isImpactAuto" alignment="CENTER" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="20" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="使用移动介质" GridPane.columnIndex="2" GridPane.rowIndex="21">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="isUsingMobileMedia" alignment="CENTER" styleClass="cell, input" GridPane.columnIndex="3" GridPane.rowIndex="21" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="远程拨号登录" GridPane.columnIndex="4" GridPane.rowIndex="21">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="remoteCallLogin" alignment="CENTER" styleClass="cell, input" GridPane.columnIndex="5" GridPane.rowIndex="21" />
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="外来设备接入" GridPane.columnIndex="6" GridPane.rowIndex="21">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="externalMediaAccess" alignment="CENTER" styleClass="cell, input" GridPane.columnIndex="7" GridPane.rowIndex="21" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="自动化并网新设备" GridPane.columnIndex="2" GridPane.rowIndex="22">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="autoNewEquip" alignment="CENTER" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="22" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="自动化定检设备" GridPane.columnIndex="2" GridPane.rowIndex="23">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="autoMaintenanceEquip" alignment="CENTER" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="23" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="自动化反措设备" GridPane.columnIndex="2" GridPane.rowIndex="24">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="autoAntiAccidentEquip" alignment="CENTER" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="24" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="自动化消缺设备" GridPane.columnIndex="2" GridPane.rowIndex="25">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="autoEliminationEquip" alignment="CENTER" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="25" />
+
+            <!-- 可靠性等其他 -->
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="涉及供电可靠性的影响" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="26">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="impact" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="26" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="其他的影响" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="27">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="otherImpact" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="27" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="附件" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="28">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="form-grid" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <TextField fx:id="file" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="变电管理X所继保自动化三班变电站远动装置转发表修改作业指导书...doc" styleClass="cell, input" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="28" />
+
+            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="申请备注" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="29" GridPane.vgrow="ALWAYS">
+            <styleClass>
+               <String fx:value="cell" />
+               <String fx:value="filed-name" />
+            </styleClass></Label>
+            <ExpandingTextArea fx:id="comment" promptText="1.已核实XX公司XX在白名单内。2.使用“四专设备”进行维护。3.进站供应商技术人员手机、智能手表、移动介质等统一管控，调试过程全程现场监护。" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="29">
+                <styleClass>
+                    <String fx:value="cell" />
+                    <String fx:value="input" />
+                </styleClass>
+            </ExpandingTextArea>
+        </GridPane>
+    </StackPane>
+</ScrollPane>

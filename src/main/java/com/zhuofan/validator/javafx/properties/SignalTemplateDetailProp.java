@@ -8,11 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
-import javax.print.DocFlavor;
-
 @Getter
 @Setter
-public class SignalTemplateDetailProperty extends SignalTemplateDetailModel {
+public class SignalTemplateDetailProp extends SignalTemplateDetailModel {
 
     private StringProperty descProp;
 
@@ -26,7 +24,7 @@ public class SignalTemplateDetailProperty extends SignalTemplateDetailModel {
 
     private StringProperty remoteSignalingTypeProp;
 
-    public SignalTemplateDetailProperty(SignalTemplateDetail model) {
+    public SignalTemplateDetailProp(SignalTemplateDetail model) {
         if (model == null) {
             return;
         }

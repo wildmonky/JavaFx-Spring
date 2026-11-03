@@ -1,0 +1,52 @@
+/* 所有单元格基础样式 */
+.cell {
+    -fx-border-color: #333333;
+    -fx-border-width: 1 1 1 1; /* 上 右 下 左 (只画右和下) */
+    -fx-padding: 6px 8px;
+    -fx-font-size: 13px;
+}
+
+/* 标题单元格 */
+.title-cell {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 15px 0;
+}
+
+/* 输入框样式（融合进表格） */
+.input {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-width: 1 1 1 1;
+}
+
+/* 去除多余边框处理（用于某些特定的合并行） */
+.noborder-right {
+    -fx-border-width: 0 0 1 0;
+}
+.noborder-left {
+    -fx-border-width: 0 1 1 0;
+}
+.noborder-bottom {
+    -fx-border-width: 0 1 0 0;
+}
+
+/* 修复外框线粗细 */
+.mainGrid {
+    -fx-border-width: 1.5px;
+}
+
+.form-grid {
+    -fx-border-color: #333;
+    -fx-border-width: 1; /* 仅作为最外层边框 */
+}
+.cell {
+    -fx-border-color: #333;
+    -fx-border-width: 0 1 1 0; /* 只显示 右、下 */
+}
+
+.filed-name {
+    -fx-background-color: #AAA1A1FF;
+    -fx-border-color: #333;
+    -fx-border-width: 0 1 1 0; /* 只显示 右、下 */
+}

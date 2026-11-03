@@ -1,11 +1,10 @@
-package com.zhuofan.validator.javafx.controller;
+package com.zhuofan.validator.javafx.controller.deviceSignal;
 
 import atlantafx.base.theme.Styles;
-import com.alibaba.excel.util.BooleanUtils;
-import com.zhuofan.validator.javafx.JavaFxServiceUtils;
-import com.zhuofan.validator.javafx.JavaFxUiUtils;
-import com.zhuofan.validator.javafx.properties.SignalTemplateDetailProperty;
-import com.zhuofan.validator.javafx.service.signal.template.SignalTemplateService;
+import com.zhuofan.validator.javafx.utils.JavaFxServiceUtils;
+import com.zhuofan.validator.javafx.utils.JavaFxUiUtils;
+import com.zhuofan.validator.javafx.properties.SignalTemplateDetailProp;
+import com.zhuofan.validator.spring.service.SignalTemplateService;
 import com.zhuofan.validator.spring.entity.SignalTemplate;
 import com.zhuofan.validator.spring.entity.SignalTemplateDetail;
 import com.zhuofan.validator.spring.model.SignalTemplateDetailModel;
@@ -18,14 +17,13 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
@@ -62,16 +60,16 @@ public class SignalTemplateController extends Control {
     public Button importButton;
 
     // 信号表格
-    public TableView<SignalTemplateDetailProperty> table;
-    private final ObservableList<SignalTemplateDetailProperty> tableData = FXCollections.observableArrayList();
+    public TableView<SignalTemplateDetailProp> table;
+    private final ObservableList<SignalTemplateDetailProp> tableData = FXCollections.observableArrayList();
     // 信号表格列
-    public TableColumn<SignalTemplateDetailProperty, String> typeCol;
-    public TableColumn<SignalTemplateDetailProperty, String> descCol;
-    public TableColumn<SignalTemplateDetailProperty, String> sampleCol;
-    public TableColumn<SignalTemplateDetailProperty, String> contentCol;
-    public TableColumn<SignalTemplateDetailProperty, String> normalStatusCol;
-    public TableColumn<SignalTemplateDetailProperty, String> remoteSignalingTypeCol;
-    public TableColumn<SignalTemplateDetailProperty, String> operationCol;
+    public TableColumn<SignalTemplateDetailProp, String> typeCol;
+    public TableColumn<SignalTemplateDetailProp, String> descCol;
+    public TableColumn<SignalTemplateDetailProp, String> sampleCol;
+    public TableColumn<SignalTemplateDetailProp, String> contentCol;
+    public TableColumn<SignalTemplateDetailProp, String> normalStatusCol;
+    public TableColumn<SignalTemplateDetailProp, String> remoteSignalingTypeCol;
+    public TableColumn<SignalTemplateDetailProp, String> operationCol;
 
     // 信号新增弹出框
     public StackPane templateDetailStackPane;
@@ -86,10 +84,6 @@ public class SignalTemplateController extends Control {
      * 0-未显示;1-新增;2-修改
      */
     private int templateModalType = 0;
-    private SignalTemplateModel editSignalTemplate = null;
-
-    @Setter
-    private ProgressIndicator progressIndicator;
 
     private SignalTemplateModel selectedSignalTemplate = null;
 
@@ -185,37 +179,37 @@ public class SignalTemplateController extends Control {
     public void initTableCol() {
         this.typeCol.setCellFactory(TextFieldTableCell.forTableColumn());
         this.typeCol.setCellValueFactory(cellData -> {
-            SignalTemplateDetailProperty value = cellData.getValue();
+            SignalTemplateDetailProp value = cellData.getValue();
             return value == null ? null : value.getTypeProp();
         });
 
         this.descCol.setCellFactory(TextFieldTableCell.forTableColumn());
         this.descCol.setCellValueFactory(cellData -> {
-            SignalTemplateDetailProperty value = cellData.getValue();
+            SignalTemplateDetailProp value = cellData.getValue();
             return value == null ? null : value.getDescProp();
         });
 
         this.sampleCol.setCellFactory(TextFieldTableCell.forTableColumn());
         this.sampleCol.setCellValueFactory(cellData -> {
-            SignalTemplateDetailProperty value = cellData.getValue();
+            SignalTemplateDetailProp value = cellData.getValue();
             return value == null ? null : value.getSampleProp();
         });
 
         this.contentCol.setCellFactory(TextFieldTableCell.forTableColumn());
         this.contentCol.setCellValueFactory(cellData -> {
-            SignalTemplateDetailProperty value = cellData.getValue();
+            SignalTemplateDetailProp value = cellData.getValue();
             return value == null ? null : value.getContentProp();
         });
 
         this.normalStatusCol.setCellFactory(ComboBoxTableCell.forTableColumn("常开", "常闭"));
         this.normalStatusCol.setCellValueFactory(cellData -> {
-            SignalTemplateDetailProperty value = cellData.getValue();
+            SignalTemplateDetailProp value = cellData.getValue();
             return value == null ? null : value.getNormalStatusProp();
         });
 
         this.remoteSignalingTypeCol.setCellFactory(ComboBoxTableCell.forTableColumn("双位置遥信", "单点遥信"));
         this.remoteSignalingTypeCol.setCellValueFactory(cellData -> {
-            SignalTemplateDetailProperty value = cellData.getValue();
+            SignalTemplateDetailProp value = cellData.getValue();
             return value == null ? null : value.getRemoteSignalingTypeProp();
         });
 
@@ -232,7 +226,7 @@ public class SignalTemplateController extends Control {
                         delButton.getStyleClass().addAll(Styles.DANGER, Styles.BUTTON_OUTLINED);
                         delButton.setOnAction(event -> {
                             // 获取被点击按钮所在的当前TreeItem对象
-                            SignalTemplateDetailProperty prop = getTableRow().getItem();
+                            SignalTemplateDetailProp prop = getTableRow().getItem();
                             if (prop == null || StringUtils.isBlank(prop.getId())) {
                                 JavaFxUiUtils.alertMessage(Alert.AlertType.INFORMATION, "空数据", Duration.seconds(3));
                                 return;
@@ -316,7 +310,7 @@ public class SignalTemplateController extends Control {
         param.setName(templateNameParam);
 
         if (this.templateModalType == 2) {
-            param.setId(this.editSignalTemplate.getId());
+            param.setId(this.selectedSignalTemplate.getId());
         }
 
         serviceUtils.asyncRun(

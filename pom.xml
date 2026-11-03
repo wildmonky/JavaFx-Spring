@@ -71,18 +71,18 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>5.4.1</version>
+            <version>5.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.4.1</version>
+            <artifactId>poi-ooxml-lite</artifactId>
+            <version>5.5.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.18.0</version>
+            <version>3.17.0</version>
         </dependency>
 
         <dependency>
@@ -158,31 +158,37 @@
 <!--        </dependency>-->
 
         <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.1.1</version> <!-- 请根据你的 JavaFX 版本选择 -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.dlsc.gemsfx</groupId>
+            <artifactId>gemsfx</artifactId>
+            <version>4.5.0</version> <!-- 请根据你的 JavaFX 版本选择 -->
+        </dependency>
+
+        <dependency>
             <groupId>io.github.mkpaz</groupId>
             <artifactId>atlantafx-base</artifactId>
             <version>2.0.1</version>
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>11.2.6</version> <!-- 请根据你的 JavaFX 版本选择 -->
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.github.mkpaz</groupId>-->
+<!--            <artifactId>devtoolsfx-gui</artifactId>-->
+<!--            <version>1.0.1</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>io.github.mkpaz</groupId>
-            <artifactId>devtoolsfx-gui</artifactId>
-            <version>1.0.1</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.mkpaz</groupId>
-            <artifactId>devtoolsfx-connector</artifactId>
-            <version>1.0.1</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.github.mkpaz</groupId>-->
+<!--            <artifactId>devtoolsfx-connector</artifactId>-->
+<!--            <version>1.0.1</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
 
 
 <!--        <dependency>-->
@@ -220,10 +226,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel-core</artifactId>
-            <version>4.0.3</version>
-<!--            <scope>test</scope>-->
+            <groupId>org.apache.fesod</groupId>
+            <artifactId>fesod-sheet</artifactId>
+            <version>2.1.0-incubating</version>
         </dependency>
 
         <dependency>

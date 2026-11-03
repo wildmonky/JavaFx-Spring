@@ -1,21 +1,18 @@
-package com.zhuofan.validator.javafx.controller;
+package com.zhuofan.validator.javafx.controller.deviceSignal;
 
 import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
-import com.zhuofan.validator.javafx.JavaFxServiceUtils;
-import com.zhuofan.validator.javafx.JavaFxUiUtils;
-import com.zhuofan.validator.javafx.properties.DeviceInfoNode;
-import com.zhuofan.validator.javafx.properties.SignalNode;
-import com.zhuofan.validator.javafx.properties.SignalTemplateDetailProperty;
-import com.zhuofan.validator.javafx.service.device.DeviceInfoService;
-import com.zhuofan.validator.javafx.service.signal.DeviceSearchService;
-import com.zhuofan.validator.javafx.service.signal.SignalFxService;
-import com.zhuofan.validator.javafx.service.signal.SignalService;
+import com.zhuofan.validator.javafx.utils.JavaFxServiceUtils;
+import com.zhuofan.validator.javafx.utils.JavaFxUiUtils;
+import com.zhuofan.validator.javafx.properties.DeviceInfoNodeProp;
+import com.zhuofan.validator.javafx.properties.SignalNodeProp;
+import com.zhuofan.validator.spring.service.SignalService;
 import com.zhuofan.validator.spring.entity.DeviceInfo;
 import com.zhuofan.validator.spring.entity.DeviceInfoSignal;
 import com.zhuofan.validator.spring.model.DeviceInfoModel;
 import com.zhuofan.validator.spring.model.SignalModel;
+import com.zhuofan.validator.spring.service.DeviceInfoService;
 import com.zhuofan.validator.spring.service.DeviceInfoSignalService;
 import jakarta.annotation.Resource;
 import javafx.beans.property.SimpleListProperty;
@@ -30,7 +27,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTreeTableCell;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.layout.AnchorPane;
@@ -52,7 +48,6 @@ import java.io.File;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -65,9 +60,9 @@ public class DeviceSignalController extends Control{
     // 设备查询按钮
     public Button searchDeviceButton;
     // 设备信号树
-    public TreeView<DeviceInfoNode> deviceTreeView;
+    public TreeView<DeviceInfoNodeProp> deviceTreeView;
 
-    private final CheckBoxTreeItem<DeviceInfoNode> deviceTreeData = new CheckBoxTreeItem<>();
+    private final CheckBoxTreeItem<DeviceInfoNodeProp> deviceTreeData = new CheckBoxTreeItem<>();
 
     // 信号查询参数
     public TextField searchParamTypeName;
@@ -78,16 +73,16 @@ public class DeviceSignalController extends Control{
     public Button exportSignalButton;
 
     // 信号表格
-    public TreeTableView<SignalNode> dataTable;
+    public TreeTableView<SignalNodeProp> dataTable;
     // 信号列
-    public TreeTableColumn<SignalNode, String> nameCol;
-    public TreeTableColumn<SignalNode, String> typeCol;
-    public TreeTableColumn<SignalNode, String> templateCol;
-    public TreeTableColumn<SignalNode, String> signalCol;
-    public TreeTableColumn<SignalNode, String> bayNameCol;
-    public TreeTableColumn<SignalNode, String> normalStatusCol;
-    public TreeTableColumn<SignalNode, String> remoteSignalingTypeCol;
-    public TreeTableColumn<SignalNode, SignalNode> operationCol;
+    public TreeTableColumn<SignalNodeProp, String> nameCol;
+    public TreeTableColumn<SignalNodeProp, String> typeCol;
+    public TreeTableColumn<SignalNodeProp, String> templateCol;
+    public TreeTableColumn<SignalNodeProp, String> signalCol;
+    public TreeTableColumn<SignalNodeProp, String> bayNameCol;
+    public TreeTableColumn<SignalNodeProp, String> normalStatusCol;
+    public TreeTableColumn<SignalNodeProp, String> remoteSignalingTypeCol;
+    public TreeTableColumn<SignalNodeProp, SignalNodeProp> operationCol;
 
     // 弹出框
     public ModalPane modal;
@@ -104,13 +99,7 @@ public class DeviceSignalController extends Control{
     @Setter
     private ProgressIndicator progressIndicator;
 
-    private final TreeItem<SignalNode> dataRoot = new TreeItem<>();
-
-    @Resource
-    private DeviceSearchService deviceSearchService;
-
-    @Resource
-    private SignalFxService signalFxService;
+    private final TreeItem<SignalNodeProp> dataRoot = new TreeItem<>();
 
     @Resource
     private ThreadPoolTaskExecutor executor;
@@ -121,6 +110,9 @@ public class DeviceSignalController extends Control{
     private SignalService signalService;
 
     private final Set<String> selectedDeviceIds = new HashSet<>();
+
+//    @Resource
+//    private DeviceInfoService123 deviceInfoService;
 
     @Resource
     private DeviceInfoService deviceInfoService;
@@ -140,20 +132,11 @@ public class DeviceSignalController extends Control{
         // 绑定设备
         deviceTreeView.setRoot(this.deviceTreeData);
         deviceTreeView.setShowRoot(false);
-        deviceSearchService.valueProperty().addListener((obs, oldVal, newVal) -> {
-            // service restart时，value会被置为null
-            if (newVal == null) {
-                return;
-            }
-            this.deviceTreeData.getChildren().clear();
-            this.deviceTreeData.getChildren().addAll(newVal.getChildren());
-        });
         // 允许多选
-//        deviceTreeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         deviceTreeView.setCellFactory(tv -> {
-            CheckBoxTreeCell<DeviceInfoNode> cell = new CheckBoxTreeCell<>() {
+            CheckBoxTreeCell<DeviceInfoNodeProp> cell = new CheckBoxTreeCell<>() {
                 @Override
-                public void updateItem(DeviceInfoNode item, boolean empty) {
+                public void updateItem(DeviceInfoNodeProp item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty || item == null) {
                         setGraphic(null);
@@ -162,7 +145,7 @@ public class DeviceSignalController extends Control{
                     }
                     String showText = getDeviceNodeName(item);
                     setText(showText);
-                    CheckBoxTreeItem<DeviceInfoNode> treeItem = (CheckBoxTreeItem<DeviceInfoNode>) getTreeItem();
+                    CheckBoxTreeItem<DeviceInfoNodeProp> treeItem = (CheckBoxTreeItem<DeviceInfoNodeProp>) getTreeItem();
                     ChangeListener<Boolean> listener = (observe, oldVal, newVal) -> {
                         if (oldVal == newVal) {
                             return;
@@ -179,24 +162,12 @@ public class DeviceSignalController extends Control{
                 }
             };
 
-//            cell.setOnMouseClicked(event -> {
-//                if (cell.isEmpty()) return;   // 空白单元格不处理
-//                TreeItem<DeviceInfoNode> item = cell.getTreeItem();
-//                if (item == null) return;
-//
-//                // 不能有耗时操作否则只会触发单击逻辑
-////                if (event.getClickCount() == 2) {
-////                    checkBox.setSelected(!checkBox.selectedProperty().get());
-////                    JavaFxUtils.alertMessage(Alert.AlertType.INFORMATION, "双击", Duration.seconds(10));
-////                }
-//            });
-
             return cell;
         });
 
         // 表格初始化
         initTable();
-        deviceSearchService.restart();
+        searchDeviceInfoTree(null);
 
         this.signalModal = initSignalModal();
     }
@@ -211,49 +182,49 @@ public class DeviceSignalController extends Control{
 
         this.nameCol.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
         this.nameCol.setCellValueFactory(cellData -> {
-            SignalNode value = cellData.getValue().getValue();
+            SignalNodeProp value = cellData.getValue().getValue();
             return value == null ? null : value.getDeviceNameProperty();
         });
 
         this.typeCol.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
         this.typeCol.setCellValueFactory(cellData -> {
-            SignalNode value = cellData.getValue().getValue();
+            SignalNodeProp value = cellData.getValue().getValue();
             return value == null ? null : value.getTypeProperty();
         });
 
         this.templateCol.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
         this.templateCol.setCellValueFactory(cellData -> {
-            SignalNode value = cellData.getValue().getValue();
+            SignalNodeProp value = cellData.getValue().getValue();
             return value == null ? null : value.getTemplateProperty();
         });
 
         this.signalCol.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
         this.signalCol.setCellValueFactory(cellData -> {
-            SignalNode value = cellData.getValue().getValue();
+            SignalNodeProp value = cellData.getValue().getValue();
             return value == null ? null : value.getSignalProperty();
         });
 
         this.bayNameCol.setCellFactory(TextFieldTreeTableCell.forTreeTableColumn());
         this.bayNameCol.setCellValueFactory(cellData -> {
-            SignalNode value = cellData.getValue().getValue();
+            SignalNodeProp value = cellData.getValue().getValue();
             return value == null ? null : value.getBayNameProp();
         });
 
         this.normalStatusCol.setCellFactory(ComboBoxTreeTableCell.forTreeTableColumn("常开", "常闭"));
         this.normalStatusCol.setCellValueFactory(cellData -> {
-            SignalNode value = cellData.getValue().getValue();
+            SignalNodeProp value = cellData.getValue().getValue();
             return value == null ? null : value.getNormalStatusProp();
         });
 
         this.remoteSignalingTypeCol.setCellFactory(ComboBoxTreeTableCell.forTreeTableColumn("双位置遥信", "单点遥信"));
         this.remoteSignalingTypeCol.setCellValueFactory(cellData -> {
-            SignalNode value = cellData.getValue().getValue();
+            SignalNodeProp value = cellData.getValue().getValue();
             return value == null ? null : value.getRemoteSignalingTypeProp();
         });
 
         // 操作列
         operationCol.setCellValueFactory(cellData -> {
-            SignalNode value = cellData.getValue().getValue();
+            SignalNodeProp value = cellData.getValue().getValue();
             return new SimpleObjectProperty<>(value);
         });
         operationCol.setCellFactory(col -> new TreeTableCell<>() {
@@ -269,7 +240,7 @@ public class DeviceSignalController extends Control{
             {
                 delBtn.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.DANGER);
                 delBtn.setOnAction(ActionEvent -> {
-                    SignalNode item = getItem();
+                    SignalNodeProp item = getItem();
                     if (item == null || item.getId() == null) {
                         return;
                     }
@@ -295,7 +266,7 @@ public class DeviceSignalController extends Control{
                 editBtn.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.ACCENT);
                 editBtn.setOnAction(actionEvent -> {
 //                    TreeItem<SignalNode> treeItem = this.getTableRow().getTreeItem();
-                    SignalNode item = getItem();
+                    SignalNodeProp item = getItem();
                     deviceSignalModalAndShow(item);
                 });
                 btnBox.getChildren().addAll(editBtn, delBtn);
@@ -305,13 +276,13 @@ public class DeviceSignalController extends Control{
 
                 addBtn.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.SUCCESS);
                 addBtn.setOnAction(actionEvent -> {
-                    SignalNode item = getItem();
+                    SignalNodeProp item = getItem();
                     deviceSignalModalAndShow(null);
                 });
 
                 clearBtn.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.DANGER);
                 clearBtn.setOnAction(actionEvent -> {
-                    SignalNode item = getItem();
+                    SignalNodeProp item = getItem();
                     if (item == null || item.getDeviceInfoId() == null) {
                         return;
                     }
@@ -337,7 +308,7 @@ public class DeviceSignalController extends Control{
 
                 recreateBtn.getStyleClass().addAll(Styles.SMALL, Styles.BUTTON_OUTLINED, Styles.ACCENT);
                 recreateBtn.setOnAction(actionEvent -> {
-                    SignalNode item = getItem();
+                    SignalNodeProp item = getItem();
                     serviceUtils.asyncRun(() -> {
                         signalService.recreate(Collections.singletonList(item.getDeviceInfoId()));
                         return true;
@@ -366,7 +337,7 @@ public class DeviceSignalController extends Control{
             }
 
             @Override
-            protected void updateItem(SignalNode item, boolean empty) {
+            protected void updateItem(SignalNodeProp item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(null);
                 if (empty || item == null) {
@@ -405,52 +376,17 @@ public class DeviceSignalController extends Control{
         );
     }
 
-    public static String getDeviceNodeName(DeviceInfoNode item) {
+    public static String getDeviceNodeName(DeviceInfoNodeProp item) {
         return item.getVoltage() + item.getName();
     }
-
-    public void deviceSelectedTrigger(TreeItem<SignalNode> root, TreeItem<DeviceInfoNode> node, boolean selected, List<TreeItem<SignalNode>> value) {
-        if (root == null || node == null) {
-            return;
-        }
-
-        signalFxService.restart();
-
-        String deviceName = DeviceSignalController.getDeviceNodeName(node.getValue());
-        List<TreeItem<SignalNode>> nodes = new ArrayList<>();
-        // 删除已存在的设备信号节点
-        if (!selected) {
-            // 查询设备对应节点
-            findNodes(root, deviceName, nodes);
-            if (nodes.isEmpty()) {
-                return;
-            }
-
-            // 删除对应的节点
-            for (TreeItem<SignalNode> n : nodes) {
-                TreeItem<SignalNode> parent = n.getParent();
-                parent.getChildren().remove(n);
-            }
-
-            return;
-        }
-
-        // 添加新选中的设备信号节点
-        TreeItem<DeviceInfoNode> parentNode = node.getParent();
-        DeviceInfoNode parentDevice = parentNode.getValue();
-        if (parentDevice != null) {// 存在父节点
-            String parentDeviceName = DeviceSignalController.getDeviceNodeName(parentDevice);
-            findNodes(root, parentDeviceName, nodes);
-        } else { // 无父节点
-            nodes.add(root);
-        }
-
-        if (nodes.isEmpty()) {
-            return;
-        }
-
-        TreeItem<SignalNode> treeItem = nodes.get(0);
-        treeItem.getChildren().addAll(value);
+    public void searchDeviceInfoTree(DeviceInfoModel param) {
+        serviceUtils.asyncRun(
+                () -> deviceInfoService.searchDeviceInfoTree(param),
+                (result, err) -> {
+                    this.deviceTreeData.getChildren().clear();
+                    this.deviceTreeData.getChildren().addAll(result.getChildren());
+                }
+        );
     }
 
     /**
@@ -459,14 +395,14 @@ public class DeviceSignalController extends Control{
      * @param deviceName 设备名
      * @return 设备名对应的节点列表
      */
-    public void findNodes(TreeItem<SignalNode> root, String deviceName, List<TreeItem<SignalNode>> nodeList) {
-        ObservableList<TreeItem<SignalNode>> children = root.getChildren();
+    public void findNodes(TreeItem<SignalNodeProp> root, String deviceName, List<TreeItem<SignalNodeProp>> nodeList) {
+        ObservableList<TreeItem<SignalNodeProp>> children = root.getChildren();
         if (CollectionUtils.isEmpty(children)) {
             return;
         }
 
-        List<TreeItem<SignalNode>> nodes = children.stream().filter(e -> {
-            SignalNode node = e.getValue();
+        List<TreeItem<SignalNodeProp>> nodes = children.stream().filter(e -> {
+            SignalNodeProp node = e.getValue();
             if (node == null) {
                 return false;
             }
@@ -476,7 +412,7 @@ public class DeviceSignalController extends Control{
 
         nodeList.addAll(nodes);
 
-        for (TreeItem<SignalNode> child : children) {
+        for (TreeItem<SignalNodeProp> child : children) {
             findNodes(child, deviceName, nodeList);
         }
     }
@@ -494,8 +430,7 @@ public class DeviceSignalController extends Control{
         param.setType("所有".equals(deviceType) ? null : deviceType);
         param.setName(deviceName);
 
-        deviceSearchService.setParam(param);
-        deviceSearchService.restart();
+        searchDeviceInfoTree(param);
     }
 
     /**
@@ -518,14 +453,11 @@ public class DeviceSignalController extends Control{
                         JavaFxUiUtils.alertMessage(Alert.AlertType.ERROR, err.getMessage(), Duration.seconds(5));
                         return;
                     }
-                    ObservableList<TreeItem<SignalNode>> children = this.dataRoot.getChildren();
+                    ObservableList<TreeItem<SignalNodeProp>> children = this.dataRoot.getChildren();
                     children.clear();
                     children.addAll(result.getChildren());
                 }
         );
-
-        signalFxService.setParam(new ArrayList<>(selectedDeviceIds));
-//        signalFxService.restart();
     }
 
     public void exportSignal(ActionEvent actionEvent) {

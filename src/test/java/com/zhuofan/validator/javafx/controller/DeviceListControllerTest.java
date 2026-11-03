@@ -1,5 +1,6 @@
 package com.zhuofan.validator.javafx.controller;
 
+import com.zhuofan.validator.javafx.controller.deviceSignal.DeviceListController;
 import com.zhuofan.validator.spring.MainApplication;
 import com.zhuofan.validator.spring.utils.SpringUtils;
 import jakarta.annotation.Resource;
