@@ -60,7 +60,7 @@ public class JavaFxApplication extends Application {
             root.setOpacity(0);
             notifyPreloader(new AppProgressNotification(0.7, "窗口初始化"));
             scene = new Scene(root, 1300, 700);
-            // 应用bootstrap样式 FIXME
+            // 应用bootstrap样式
 //            scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
             // 启用AtlantaFX样式
             Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());

@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.InputStream;
 
@@ -60,7 +59,7 @@ public class AppPreloader extends Preloader {
 
         Scene scene = new Scene(root, 300, 150);
         // 应用bootstrap样式
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
         if (image != null) {
             primaryStage.getIcons().addAll(image);
         }

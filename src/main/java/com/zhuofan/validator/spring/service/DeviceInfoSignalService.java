@@ -57,11 +57,16 @@ public class DeviceInfoSignalService {
         }
 
         Map<String, String> deviceInfoMap = deviceInfoMapper.selectList(Wrappers.<DeviceInfo>lambdaQuery().in(DeviceInfo::getId, deviceInfoIds)).stream().collect(Collectors.toMap(DeviceInfo::getId, DeviceInfo::getName));
-        List<DeviceInfoSignal> deviceInfoSignals = mapper.selectList(Wrappers.<DeviceInfoSignal>lambdaQuery()
-                .in(DeviceInfoSignal::getDeviceInfoId, deviceInfoIds)
-                .like(deviceInfoSignal != null && StringUtils.isNotBlank(deviceInfoSignal.getSignalType()), DeviceInfoSignal::getSignalType, deviceInfoSignal.getSignalType())
-                .like(deviceInfoSignal != null && StringUtils.isNotBlank(deviceInfoSignal.getSignalTemplate()), DeviceInfoSignal::getSignalTemplate, deviceInfoSignal.getSignalTemplate())
-        );
+        List<DeviceInfoSignal> deviceInfoSignals;
+        if (deviceInfoSignal == null) {
+            deviceInfoSignals = mapper.selectList(Wrappers.<DeviceInfoSignal>lambdaQuery().in(DeviceInfoSignal::getDeviceInfoId, deviceInfoIds));
+        } else {
+            deviceInfoSignals = mapper.selectList(Wrappers.<DeviceInfoSignal>lambdaQuery()
+                    .in(DeviceInfoSignal::getDeviceInfoId, deviceInfoIds)
+                    .like(StringUtils.isNotBlank(deviceInfoSignal.getSignalType()), DeviceInfoSignal::getSignalType, deviceInfoSignal.getSignalType())
+                    .like(StringUtils.isNotBlank(deviceInfoSignal.getSignalTemplate()), DeviceInfoSignal::getSignalTemplate, deviceInfoSignal.getSignalTemplate())
+            );
+        }
 
         return buildTree(deviceInfoMap, deviceInfoSignals);
     }

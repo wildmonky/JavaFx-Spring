@@ -11,7 +11,6 @@ module com.zhuofan.validator {
     requires javafx.controls;
     requires javafx.fxml;
 
-    requires org.kordamp.bootstrapfx.core;
     requires static lombok;
 
     requires spring.boot.autoconfigure;

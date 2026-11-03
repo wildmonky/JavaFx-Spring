@@ -126,7 +126,7 @@ public class DeviceListController extends Control{
         this.deviceDataTable.setFixedCellSize(-1);
         this.deviceDataTable.setEditable(true);
         this.deviceDataTable.setShowRoot(false);
-        this.deviceDataTable.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+        this.deviceDataTable.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
         // 绑定数据
         this.deviceDataTable.rootProperty().bind(new SimpleObjectProperty<>(dataRoot));
 

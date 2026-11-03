@@ -5,7 +5,7 @@ SETLOCAL
 SET "app-name=validator-tools"
 SET "tools-dir=%~dp0"
 SET "log-file=%tools-dir%package.out"
-SET "version=3.0"
+SET "version=3.1"
 SET "type=msi"
 ::>=jdk 21
 SET "jpackage=C:\development\enviorment\java\Eclipse Temurin\jdk-21.0.12.1+1\bin\jpackage"
