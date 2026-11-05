@@ -33,7 +33,7 @@ public class JavaFxKeyBoardUtils {
 
     public static final AtomicBoolean keyboardVisible = new AtomicBoolean(false);
 
-    private static User32Ext.WinEventProc callback = (hook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) -> {
+    private final static User32Ext.WinEventProc KEYBOARD_EVENT_CALLBACK = (hook, event, hwnd, idObject, idChild, dwEventThread, dwmsEventTime) -> {
         // 在回调中处理事件，注意这里的代码运行在 hookThread 上
         if (idObject != 0 || hwnd == null) return;
         if (WinEventHookUtils.isKeyboardProcess(hwnd)) {
@@ -96,7 +96,7 @@ public class JavaFxKeyBoardUtils {
                 // 路径指向Windows自带的触摸键盘程序
                 Runtime.getRuntime().exec(new String[]{"cmd", "/c", "C:\\Program Files\\Common Files\\microsoft shared\\ink\\tabtip.exe"}, null, null);
                 // 监听显示/隐藏事件
-                WinEventHookUtils.start(0, hwnd, callback);
+                WinEventHookUtils.start(0, hwnd, KEYBOARD_EVENT_CALLBACK);
                 keyboardVisible.set(true);
             } catch (Exception e) {
                 log.error("键盘唤起失败", e);
@@ -149,7 +149,7 @@ public class JavaFxKeyBoardUtils {
                 // 判断是否绑定监听
                 if (!WinEventHookUtils.isHooked(hwndDesktop)) {
                     WinEventHookUtils.stop();
-                    WinEventHookUtils.start(0, hwndDesktop, callback);
+                    WinEventHookUtils.start(0, hwndDesktop, KEYBOARD_EVENT_CALLBACK);
                 }
 
                 // 1. 反转键盘显示状态
