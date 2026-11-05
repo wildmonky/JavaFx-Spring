@@ -47,6 +47,8 @@ module com.zhuofan.validator {
     requires org.apache.commons.compress;
     requires org.apache.commons.io;
     requires org.apache.poi.ooxml;
+    requires com.sun.jna.platform;
+    requires com.sun.jna;
 
     exports com.zhuofan.validator;
     exports com.zhuofan.validator.javafx.properties;
@@ -94,4 +96,6 @@ module com.zhuofan.validator {
     exports com.zhuofan.validator.javafx.controller.deviceSignal to javafx.fxml, spring.beans;
     opens com.zhuofan.validator.javafx.controller.deviceSignal to javafx.fxml, spring.core;
     opens com.zhuofan.validator.spring.service to javafx.fxml, spring.beans, spring.core;
+    exports com.zhuofan.validator.javafx.utils.win;
+    opens com.zhuofan.validator.javafx.utils.win;
 }

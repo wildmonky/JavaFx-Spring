@@ -5,6 +5,7 @@ import com.zhuofan.validator.javafx.controller.deviceSignal.DeviceSignalControll
 import jakarta.annotation.Resource;
 import javafx.fxml.FXML;
 
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
@@ -13,6 +14,8 @@ import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 
+import java.util.Objects;
+
 /**
  * 事件处理不能阻塞，否则导致桌面端无响应（阻塞了），在事件处理逻辑中调用的组件也无法正常显示（必须事件处理逻辑走完才会刷新，所以才用线程池异步）
  */
@@ -20,12 +23,16 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class MainController {
 
+    public static volatile boolean useVirtualKeyboardVal;
+
     // 0.0 ---> 1.0
     @FXML
     public ProgressBar progressBar;
     // 0.0 ---> 1.0
     @FXML
     public ProgressIndicator progressIndicator;
+
+    public CheckBox useVirtualKeyboard;
 
     @FXML
     private Pane analysis;
@@ -56,6 +63,18 @@ public class MainController {
 
         deviceListController.setProgressIndicator(progressIndicator);
         deviceSignalController.setProgressIndicator(progressIndicator);
+
+        useVirtualKeyboard.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (Objects.equals(oldVal, newVal)) {
+                return;
+            }
+
+            if (newVal == null) {
+                return;
+            }
+
+            useVirtualKeyboardVal = newVal;
+        });
     }
 
 }

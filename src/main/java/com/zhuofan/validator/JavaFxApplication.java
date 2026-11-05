@@ -1,9 +1,11 @@
 package com.zhuofan.validator;
 
 import atlantafx.base.theme.PrimerLight;
+import com.zhuofan.validator.javafx.utils.win.JavaFxKeyBoardUtils;
 import com.zhuofan.validator.javafx.utils.JavaFxLoadUtils;
 import com.zhuofan.validator.javafx.preloader.AppProgressNotification;
 import com.zhuofan.validator.javafx.preloader.AppReadyPreloaderNotification;
+import com.zhuofan.validator.javafx.utils.win.KeyboardDetector;
 import com.zhuofan.validator.spring.MainApplication;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -91,6 +93,8 @@ public class JavaFxApplication extends Application {
             stage.getIcons().add(image);
         }
         stage.setScene(scene);
+        // 没有外接键盘时,全局绑定键盘
+        JavaFxKeyBoardUtils.bindGlobalKeyboard(scene);
         stage.show();
         notifyPreloader(new AppReadyPreloaderNotification());
         fadeIn(scene.getRoot());

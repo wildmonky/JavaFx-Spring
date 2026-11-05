@@ -101,6 +101,8 @@ public class SubStationNoteController extends Control {
 
         this.contentModal.setWrapText(true);
         this.commentModal.setWrapText(true);
+//        // 绑定唤起键盘
+//        JavaFxKeyBoardUtils.bindWindowsTouchKeyboard(this.commentModal);
 
         resetSearchParam();
         initTableCol();

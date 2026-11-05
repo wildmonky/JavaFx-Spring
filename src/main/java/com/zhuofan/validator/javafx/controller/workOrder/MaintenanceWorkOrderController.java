@@ -5,7 +5,6 @@ import com.zhuofan.validator.spring.model.AutomaticMaintenanceWorkOrderModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;

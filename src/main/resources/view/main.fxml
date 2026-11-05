@@ -1,31 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity"
-      maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="700.0" prefWidth="1300.0" stylesheets="@css/main.css"
-      xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.zhuofan.validator.javafx.controller.MainController"
->
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zhuofan.validator.javafx.controller.MainController">
    <TabPane layoutX="-1.0" prefHeight="700.0" prefWidth="1300.0" tabClosingPolicy="UNAVAILABLE">
        <Tab text="校验文件">
          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-             <fx:include source="analysis.fxml" fx:id="analysis" />
+             <fx:include fx:id="analysis" source="analysis.fxml" />
          </AnchorPane>
        </Tab>
        <Tab text="描述生成">
            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="175.0" prefWidth="619.0">
-                   <fx:include source="build.fxml" fx:id="build" />
+                   <fx:include fx:id="build" source="build.fxml" />
            </AnchorPane>
        </Tab>
        <Tab text="站点设备">
            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="175.0" prefWidth="619.0">
-               <fx:include source="deviceList.fxml" fx:id="deviceList" />
+               <fx:include source="deviceList.fxml" />
            </AnchorPane>
        </Tab>
        <Tab text="信号模板">
@@ -48,6 +43,11 @@
        </Tab>
    </TabPane>
 
-   <ProgressBar fx:id="progressBar" opacity="0.5" layoutX="450.0" layoutY="440.0" prefWidth="400.0" progress="0.0" visible="false" />
+   <ProgressBar fx:id="progressBar" layoutX="450.0" layoutY="440.0" opacity="0.5" prefWidth="400.0" progress="0.0" visible="false" />
+   <AnchorPane prefHeight="36.0" prefWidth="200.0" AnchorPane.rightAnchor="10.0">
+      <children>
+         <CheckBox fx:id="useVirtualKeyboard" layoutX="45.0" layoutY="10.0" mnemonicParsing="false" text="使用虚拟键盘" />
+      </children>
+   </AnchorPane>
 
-</Pane>
+</AnchorPane>
