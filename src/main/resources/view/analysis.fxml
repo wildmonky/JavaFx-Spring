@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
-<Pane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.zhuofan.validator.javafx.controller.AnalysisController"
-            prefHeight="700.0" prefWidth="1300.0">
+
+<Pane prefHeight="700.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zhuofan.validator.javafx.controller.AnalysisController">
 
     <Pane layoutX="310.0" layoutY="62.0" prefHeight="31.0" prefWidth="680.0">
         <AnchorPane>
@@ -24,7 +26,7 @@
         </Button>
         <Button fx:id="downloadButton" layoutX="606.0" mnemonicParsing="false" onAction="#download" prefHeight="31.0" prefWidth="64.0" styleClass="btn, btn-primary" text="下载" />
     </Pane>
-    <TableView fx:id="dataTable" layoutY="102.0" prefHeight="590.0" prefWidth="1300.0">
+    <TableView fx:id="dataTable" layoutY="102.0" prefHeight="595.0" prefWidth="1300.0">
         <columns>
             <TableColumn fx:id="pointCode" prefWidth="75.0" text="行数" />
             <TableColumn fx:id="alarmContent" prefWidth="560.0" text="告警信息" />
@@ -32,6 +34,9 @@
             <TableColumn fx:id="needMainMerge" prefWidth="120.0" text="是否主站合并" />
             <TableColumn fx:id="message" prefWidth="540.0" text="检测结果" />
         </columns>
+      <padding>
+         <Insets bottom="30.0" />
+      </padding>
     </TableView>
 
 </Pane>

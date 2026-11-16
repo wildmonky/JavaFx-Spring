@@ -1036,10 +1036,12 @@ public class AlarmService {
                             }
                         }
                     }
-                    if (StringUtils.isBlank(deviceSCADAInputInfo.getWarnInfo())) {
-                        break;
+//                    if (StringUtils.isBlank(deviceSCADAInputInfo.getWarnInfo())) {
+//                        break;
+//                    }
+                    if (StringUtils.isNotBlank(deviceSCADAInputInfo.getWarnInfo())) {
+                        list.add(deviceSCADAInputInfo);
                     }
-                    list.add(deviceSCADAInputInfo);
                 }
 
                 sheetInfo.setTotalRowNum(list.size());
