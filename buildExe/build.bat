@@ -2,9 +2,9 @@
 setlocal enabledelayedexpansion
 
 :: the bat file to execute (args via %* are forwarded to package.bat)
-set bat.file=C:\development\repository\javafx\rule-validator\buildExe\tools\package.bat
+set bat.file=%~dp0tools\package.bat
 :: the log file written by package.bat
-set bat.log.out=C:\development\repository\javafx\rule-validator\buildExe\tools\package.out
+set bat.log.out=%~dp0tools\package.out
 
 set common.function=%~dp0tools\common.bat
 

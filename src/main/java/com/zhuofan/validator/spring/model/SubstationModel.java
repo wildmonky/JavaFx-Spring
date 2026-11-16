@@ -11,9 +11,6 @@ public class SubstationModel extends Substation {
 
     private String displayName;
 
-    /** 电压 */
-    private String voltage;
-
     public SubstationModel(Substation substation) {
         super();
         BeanUtils.copyProperties(substation, this);
